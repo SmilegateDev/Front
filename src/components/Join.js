@@ -20,9 +20,13 @@ class Join extends Component {
     });
   }
 
-  handleJoin = (e) => {
-    e.preventDefault();
+  pressEnter = (e) => {
+    if (e.key === "Enter") {
+      this.handleJoin();
+    }
+  }
 
+  handleJoin = () => {
     if (this.state.email === null || this.state.email.length === 0) {
       return this.setState({
         joinMsg: "이메일을 입력해주세요."
@@ -70,11 +74,11 @@ class Join extends Component {
         <article className="custom-article">
           <div className="mainarticle">
           <img src="brand.png" width="150" />
-            <form method="POST" onSubmit={this.handleJoin}>
-              <input type="text" className="form-control custom-form" name="email" id="email" placeholder="이메일" onChange={ this.handleChange } />
-              <input type="text" className="form-control custom-form mt-3" name="nickname" id="nickname" placeholder="닉네임" onChange={ this.handleChange } />
-              <input type="password" className="form-control custom-form mt-3" name="password" id="password" placeholder="비밀번호" onChange={ this.handleChange } />
-              <input type="password" className="form-control custom-form mt-3" name="passwordCheck" id="passwordCheck" placeholder="비밀번호 확인" onChange={ this.handleChange } />
+            <form method="POST" onSubmit={e => { e.preventDefault(); }}>
+              <input type="text" className="form-control custom-form" name="email" id="email" placeholder="이메일" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
+              <input type="text" className="form-control custom-form mt-3" name="nickname" id="nickname" placeholder="닉네임" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
+              <input type="password" className="form-control custom-form mt-3" name="password" id="password" placeholder="비밀번호" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
+              <input type="password" className="form-control custom-form mt-3" name="passwordCheck" id="passwordCheck" placeholder="비밀번호 확인" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
               <div className="row justify-content-center custom-text-danger mt-4">{ this.state.joinMsg }</div>
               <button type="button" className="btn btn-success btn-block custom-login-btn" onClick={ this.handleJoin }>회원가입</button>
             </form>

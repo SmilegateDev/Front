@@ -24,9 +24,7 @@ class Login extends Component {
     }
   }
 
-  handleLogin = (e) => {
-    e.preventDefault();
-    
+  handleLogin = () => {
     const data = {
       email: this.state.email,
       password: this.state.password
@@ -57,7 +55,7 @@ class Login extends Component {
         <article className="custom-article">
           <div className="mainarticle">
             <img src="brand.png" width="150" />
-            <form method="POST" onSubmit={this.handleLogin}>
+            <form method="POST" onSubmit={e => { e.preventDefault(); }}>
               <input type="text" className="form-control custom-form" name="email" id="email" placeholder="이메일" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
               <input type="password" className="form-control custom-form mt-3" name="password" id="password" placeholder="비밀번호" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
               <div className="row justify-content-center custom-text-danger mt-4">{ this.state.loginMsg }</div>

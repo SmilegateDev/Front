@@ -17,9 +17,7 @@ class Post extends Component {
     });
   }
 
-  handlePost = (e) => {
-    e.preventDefault();
-    
+  handlePost = () => {
     const data = {
       title: this.state.title,
       content: this.state.content
@@ -47,7 +45,7 @@ class Post extends Component {
         <div className="head custom-head">글 작성하기</div>
         <article className="custom-article">
           <div className="mainarticle">
-            <form method="POST" onSubmit={this.handlePost}>
+            <form method="POST" onSubmit={e => { e.preventDefault(); }}>
               <input type="text" className="form-control custom-form mt-4" name="title" id="title" placeholder="제목" onChange={ this.handleChange } />
               <hr className="post-hr my-4" />
               <textarea className="form-control custom-form mt-3" name="content" id="content" placeholder="글 내용" onChange={ this.handleChange } rows="10"></textarea>

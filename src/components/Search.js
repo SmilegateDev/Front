@@ -15,9 +15,13 @@ class Search extends Component {
     this.setState({ [e.currentTarget.name]: e.currentTarget.value });
   }
 
+  pressEnter = (e) => {
+    if (e.key === "Enter") {
+      this.handleSearch();
+    }
+  }
+
   handleSearch = (e) => {
-    e.preventDefault();
-    
     const data = {
       nickname: this.state.nickname
     }
@@ -31,7 +35,9 @@ class Search extends Component {
 
     axios.post("/follow/search", data, headers)
     .then(res => {
-      alert(res.data);
+      const userList = JSON.parse(res.data);
+
+      this.setState({ userList: userList });
     })
     .catch(err => {
       alert(err);
@@ -44,11 +50,13 @@ class Search extends Component {
         <div className="head custom-head">사용자 검색</div>
         <article className="custom-article">
           <div className="mainarticle mt-5">
-            <form method="POST" onSubmit={this.handleSearch}>
-              <input type="text" className="form-control custom-form" name="nickname" id="nickname" placeholder="닉네임 검색" onChange={this.handleChange} />
+            <form method="POST" className="mb-5" onSubmit={e => { e.preventDefault(); }}>
+              <input type="text" className="form-control custom-form" name="nickname" id="nickname" placeholder="닉네임 검색" onChange={this.handleChange} onKeyPress={ this.pressEnter } />
               <button type="button" className="btn btn-success btn-block custom-search-btn" onClick={this.handleSearch}>검색</button>
             </form>
-            <hr className="login-hr" />
+            {this.state.userList ? this.state.userList.map(user => {
+              return <h3 className="text-center mt-3">{ user.nickname }</h3>
+            }) : null}
           </div>
         </article>
       </div>
