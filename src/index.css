@@ -1,0 +1,182 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+#root {
+  font-family: 'Jua', sans-serif !important;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+#vmap {
+  width: 100%;
+  height: 100%;
+}
+div .head {
+  display: inline-block;
+  margin-top: 10px;
+}
+#sidebar {
+  width: 100px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background: black;
+  color: #fff !important;
+  text-align: center;
+}
+#sidebar li {
+  color: white !important;
+}
+#sidebar li:hover {
+  color: deepskyblue !important;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+article {
+  display: block;
+  width: 100%;
+}
+aside {
+  margin : 0 auto;
+}
+#feed {
+  background: #333;
+  width: 400px;
+  height: 100%;
+  top: 0;
+  left: -400px;
+  position: fixed;
+  transition: left .25s linear;
+  font-size: 150%;
+}
+#login {
+  background: #333;
+  width: 400px;
+  height: 100%;
+  top: 0;
+  left: -400px;
+  position: fixed;
+  transition: left .25s linear;
+}
+#join {
+  background: #333;
+  width: 400px;
+  height: 100%;
+  top: 0;
+  left: -400px;
+  position: fixed;
+  transition: left .25s linear;
+}
+#post {
+  background: #333;
+  width: 400px;
+  height: 100%;
+  top: 0;
+  left: -400px;
+  position: fixed;
+  transition: left .25s linear;
+}
+#myPost {
+  background: #333;
+  width: 400px;
+  height: 100%;
+  top: 0;
+  left: -400px;
+  position: fixed;
+  transition: left .25s linear;
+  font-size: 150%;
+}
+#notice {
+  background: #333;
+  width: 400px;
+  height: 100%;
+  top: 0;
+  left: -400px;
+  position: fixed;
+  transition: left .25s linear;
+  font-size: 150%;
+}
+#search {
+  background: #333;
+  width: 400px;
+  height: 100%;
+  top: 0;
+  left: -400px;
+  position: fixed;
+  transition: left .25s linear;
+  font-size: 120%;
+}
+.out {
+  text-align: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  left: 100px !important;
+}
+.mainarticle {
+  display: inline-block;
+  margin: 0 auto;
+  color: white;
+  width: 300px;
+}
+.custom-list {
+  margin-top: 30px;
+}
+.font-size-350 {
+  font-size: 350%;
+}
+.custom-p {
+  margin-top: 10px;
+  font-size: 125%;
+}
+.custom-head {
+  color : #fff;
+  font-size: 50px;
+}
+.custom-form {
+  font-size: 125% !important;
+}
+.custom-login-btn {
+  margin-top: 20px;
+  font-size: 150% !important;
+}
+.custom-search-btn {
+  margin-top: 20px;
+  font-size: 120% !important;
+}
+.oauth-login-btn {
+  display: block;
+  margin-top: 30px;
+  font-size: 150% !important;
+  width: 300px !important;
+}
+.custom-article {
+  align-content: center;
+}
+.login-hr {
+  margin-top: 30px;
+  border: solid 1px white;
+}
+.post-hr {
+  border: solid 1px white;
+}
+.feed-hr {
+  border: solid 1px white;
+}
+.feed-comment {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.notice-hr {
+  border: solid 1px white;
+}
+.notice-comment {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.custom-text-danger {
+  color: #ff9090;
+  font-size: 150%;
+}
