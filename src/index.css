@@ -78,6 +78,7 @@ aside {
   left: -400px;
   position: fixed;
   transition: left .25s linear;
+  font-size: 120%;
 }
 #myPost {
   background: #333;
@@ -109,11 +110,27 @@ aside {
   transition: left .25s linear;
   font-size: 120%;
 }
+#user-post {
+  background: #333;
+  width: 400px;
+  height: 100%;
+  top: 0;
+  right: -400px;
+  position: fixed;
+  transition: right .25s linear;
+  font-size: 150%;
+}
 .out {
   text-align: center;
   overflow-y: auto;
   overflow-x: hidden;
   left: 100px !important;
+}
+.right-out {
+  text-align: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  right: 0px !important;
 }
 .mainarticle {
   display: inline-block;
@@ -179,4 +196,11 @@ aside {
 .custom-text-danger {
   color: #ff9090;
   font-size: 150%;
+}
+.custom-user-list:hover {
+  color: deepskyblue;
+  cursor: pointer;
+}
+.user-profile-btn {
+  font-size: 100% !important;
 }
