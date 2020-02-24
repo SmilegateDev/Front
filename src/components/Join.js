@@ -47,6 +47,12 @@ class Join extends Component {
         joinMsg: "비밀번호와 비밀번호 확인이 일치하지 않습니다."
       });
     }
+
+    const regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+    if (this.state.email.match(regExp) === null) {
+      return this.setState({ joinMsg: "이메일 형식이 올바르지 않습니다." });
+    }
     
     const data = {
       email: this.state.email,
