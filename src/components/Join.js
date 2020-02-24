@@ -59,6 +59,7 @@ class Join extends Component {
       if (res.data.code === 400) {
         return this.setState({ joinMsg: res.data.msg });
       } else {
+        alert("입력하신 이메일로 인증 메일을 전송했습니다.");
         return this.props.setActiveItem("login-on");
       }
     })
@@ -69,11 +70,11 @@ class Join extends Component {
 
   render() {
     return (
-      <div id="join" className={this.props.activeItem == "join-on" ? "out" : ""}>
+      <div id="join" className={this.props.activeItem === "join-on" ? "out" : ""}>
         <div className="head custom-head">회원가입</div>
         <article className="custom-article">
           <div className="mainarticle">
-          <img src="brand.png" width="150" />
+          <img src="brand.png" width="150" alt="brand" />
             <form method="POST" onSubmit={e => { e.preventDefault(); }}>
               <input type="text" className="form-control custom-form" name="email" id="email" placeholder="이메일" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
               <input type="text" className="form-control custom-form mt-3" name="nickname" id="nickname" placeholder="닉네임" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />

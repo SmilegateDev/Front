@@ -51,10 +51,10 @@ class Login extends Component {
 
   render() {
     return (
-      <div id="login" className={this.props.activeItem == "login-on" ? "out" : ""}>
+      <div id="login" className={this.props.activeItem === "login-on" ? "out" : ""}>
         <article className="custom-article">
           <div className="mainarticle">
-            <img src="brand.png" width="150" />
+            <img src="brand.png" width="150" alt="brand" />
             <form method="POST" onSubmit={e => { e.preventDefault(); }}>
               <input type="text" className="form-control custom-form" name="email" id="email" placeholder="이메일" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
               <input type="password" className="form-control custom-form mt-3" name="password" id="password" placeholder="비밀번호" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />

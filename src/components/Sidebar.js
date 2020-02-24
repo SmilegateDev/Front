@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -7,16 +6,10 @@ class Sidebar extends Component {
   }
 
   handleLogout = () => {
-    axios.get("/auth/logout")
-    .then(res => {
-      localStorage.clear();
-      this.props.setLoginState(false);
-      this.props.setActiveItem(null);
-      this.props.setAllDataNull();
-    })
-    .catch(err => {
-      alert("오류가 발생했습니다.");
-    });
+    localStorage.clear();
+    this.props.setLoginState(false);
+    this.props.setActiveItem(null);
+    this.props.setAllDataNull();
   } 
 
   render() {

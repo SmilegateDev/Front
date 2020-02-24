@@ -7,7 +7,7 @@ class Notice extends Component {
 
   render() {
     return (
-      <div id="notice" className={this.props.activeItem == "notice-on" ? "out" : ""}>
+      <div id="notice" className={this.props.activeItem === "notice-on" ? "out" : ""}>
         <div className="head custom-head">알림</div><hr className="notice-hr" />
         <article className="custom-article">
           <div className="mainarticle">

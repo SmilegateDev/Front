@@ -2,6 +2,9 @@ body {
   margin: 0;
   padding: 0;
 }
+::selection {
+  background-color: #ccd9e3;
+}
 #root {
   font-family: 'Jua', sans-serif !important;
   width: 100vw;
@@ -154,6 +157,9 @@ aside {
 }
 .custom-form {
   font-size: 125% !important;
+}
+.custom-search-form {
+  font-size: 120% !important;
 }
 .custom-login-btn {
   margin-top: 20px;

@@ -41,7 +41,7 @@ class Post extends Component {
 
   render() {
     return (
-      <div id="post" className={this.props.activeItem == "post-on" ? "out" : ""}>
+      <div id="post" className={this.props.activeItem === "post-on" ? "out" : ""}>
         <div className="head custom-head">글 작성하기</div>
         <article className="custom-article">
           <div className="mainarticle">
