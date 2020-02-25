@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 class Search extends Component {
   constructor(props) {
@@ -10,7 +11,8 @@ class Search extends Component {
       searchTarget: null,
       userList: null,
       userFollow: null,
-      userPost: null
+      userPost: null,
+      replyContents: {}
     }
   }
 
@@ -24,9 +26,7 @@ class Search extends Component {
     }
   }
 
-
-
-  handleSearch = (e) => {
+  handleSearch = () => {
     const data = {
       nickname: this.state.nickname
     }
@@ -158,6 +158,106 @@ class Search extends Component {
     });
   }
 
+  handleReplyChange = (e) => {
+    let newReply = this.state.replyContents;
+
+    newReply[e.currentTarget.dataset.id] = e.currentTarget.value;
+
+    this.setState({replyContents: newReply});
+  }
+
+  handleReply = (e) => {
+    if (this.state.replyContents[e.currentTarget.dataset.id] === undefined || this.state.replyContents[e.currentTarget.dataset.id].length === 0) {
+      return alert("댓글을 입력해주세요");
+    }
+
+    const data = {
+      objectId: e.currentTarget.dataset.id,
+      replyContents: this.state.replyContents[e.currentTarget.dataset.id]
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    const id = e.currentTarget.dataset.id;
+    const index = e.currentTarget.dataset.index;
+
+    axios.post("/post/createReply", data, headers)
+    .then(res => {
+      if (res.data.code === 200) {
+        if (this.state.userPost[index]['replyWriter']) {
+          let newPost = this.state.userPost.slice();
+
+          newPost[index]['replyWriter'].push(jwt.decode(localStorage.getItem("token")).nickname);
+          newPost[index]['replyContents'].push(this.state.replyContents[id]);
+          newPost[index]['reply_num']++;
+
+          this.setState({userPost: newPost });
+        } else {
+          let newPost = this.state.userPost.slice();
+
+          newPost[index]['reply_num']++;
+
+          this.setState({userPost: newPost });
+        }
+      } else {
+        alert(res.data.message);
+      }
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+
+  handleGetReply = (e) => {
+    const data = {
+      objectId: e.currentTarget.dataset.id
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    const index = e.currentTarget.dataset.index;
+
+    axios.post("/post/getReply", data, headers)
+    .then(res => {
+      let newPost = this.state.userPost.slice();
+
+      const writerArr = Object.keys(res.data).map(function(key) {
+        return [res.data[key].writer];
+      });
+
+      const contentsArr = Object.keys(res.data).map(function(key) {
+        return [res.data[key].replyContents];
+      });
+
+      newPost[index]['replyWriter'] = writerArr;
+      newPost[index]['replyContents'] = contentsArr;
+
+      this.setState({userPost: newPost });
+    })
+    .catch(err => {
+      alert("오류가 발생했습니다.");
+    });
+  }
+
+  handleFoldReply = (e) => {
+    let newPost = this.state.userPost.slice();
+
+    newPost[e.currentTarget.dataset.index]['replyWriter'] = null;
+    newPost[e.currentTarget.dataset.index]['replyContents'] = null;
+
+    this.setState({userPost: newPost });
+  }
+
   render() {
     return (
       <Fragment>
@@ -202,14 +302,23 @@ class Search extends Component {
                     }
                   </div>
                   <div>{ post.likes_num }명이 좋아합니다.</div>
-                  <div className="mt-2">{this.state.searchTarget}) { post.contents }</div><div className="mt-4">댓글 { post.reply_num }개 모두 보기</div>
+                  <div className="mt-2">{this.state.searchTarget}) { post.contents }</div>
+                  { post.replyWriter ?
+                    <Fragment>
+                      <div className="mt-4 get-reply mb-3" onClick={this.handleFoldReply} data-index={index}>댓글 접기</div>
+                        {post.replyWriter.map((writer, index) => {
+                          return <div>{writer}) {post.replyContents[index]}</div>
+                        })}
+                    </Fragment> :
+                    <div className="mt-4 get-reply" data-id={post._id} onClick={this.handleGetReply} data-index={index}>댓글 { post.reply_num }개 모두 보기</div>
+                  }
                   <div className="mt-3">
                     <form method="POST" onSubmit={e => { e.preventDefault(); }}>
                       <div className="form-group">
                         <div className="input-group">
-                          <input type="text" className="form-control custom-reply-form" name="reply" id="reply" placeholder="댓글 달기..." />
+                          <input type="text" className="form-control custom-reply-form" name="reply" id="reply" placeholder="댓글 달기..." data-id={post._id} onChange={this.handleReplyChange} />
                           <div className="input-group-append">
-                            <span className="input-group-text"><i class="far fa-comment-dots custom-reply-btn"></i>
+                            <span className="input-group-text custom-reply-btn"><i class="far fa-comment-dots" data-id={post._id} data-index={index} onClick={this.handleReply}></i>
                           </span>
                         </div>
                       </div>

@@ -214,5 +214,12 @@ aside {
   font-size: 100% !important;
 }
 .custom-reply-btn {
-  font-size: 150%;
+  font-size: 125%;
+}
+.custom-reply-btn:hover {
+  cursor: pointer;
+}
+.get-reply:hover {
+  color: deepskyblue;
+  cursor: pointer;
 }

@@ -14,11 +14,13 @@ class App extends Component {
     super(props);
 
     this.state = {
+      map: null,
       activeItem: null,
       feedData: null,
       postData: null,
       noticeData: null,
-      isLogin: false
+      isLogin: false,
+      location: null
     }
   }
 
@@ -31,40 +33,10 @@ class App extends Component {
       homePosition: window.vw.ol3.CameraPosition,
       initPosition: window.vw.ol3.CameraPosition
     };
-  
+
     const vmap = new window.vw.ol3.Map("vmap",  window.vw.ol3.MapOptions);
-    
-    vmap.on('click', function (evt) {
-      addMarkerLayer(evt.coordinate);
-    });
-    
-    function addMarkerLayer(input) {
-      window.markerLayer = new window.vw.ol3.layer.Marker(vmap);
-      vmap.addLayer(window.markerLayer);
-      addMarker(input);
-    }
 
-    function addMarker(input) {
-      window.vw.ol3.markerOption = {
-        x : input[0],
-        y : input[1],
-        epsg : "EPSG:900913",
-        title : '리액트 마커 타이틀',
-        contents : '리액트 마커 컨텐츠',
-        iconUrl : 'http://map.vworld.kr/images/ol3/marker_blue.png', 
-        text : {
-          offsetX: 0.5,
-          offsetY: 20,
-          font: '12px Calibri,sans-serif',
-          fill: {color: '#000'},
-          stroke: {color: '#fff', width: 2},
-          text: '리액트 마커 텍스트'
-        },
-        attr: { "id": "marker01", "name": "속성명1" }  
-      };
-
-      window.markerLayer.addMarker(window.vw.ol3.markerOption);
-    }
+    this.setState({map: vmap});
 
     if (localStorage.getItem("token") !== null) {
       this.setState({
@@ -141,7 +113,35 @@ class App extends Component {
       .catch(err => {
         alert(err);
       });
-    } 
+    } else if (clicked === "post-on" && this.state.activeItem !== clicked) {
+      this.state.map.on('click', (evt) => {
+        alert(window.markerLayer);
+        this.setState({location: evt.coordinate});
+
+        window.markerLayer = new window.vw.ol3.layer.Marker(this.state.map);
+        this.state.map.addLayer(window.markerLayer);
+
+        window.vw.ol3.markerOption = {
+          x : evt.coordinate[0],
+          y : evt.coordinate[1],
+          epsg : "EPSG:900913",
+          title : '리액트 마커 타이틀',
+          contents : '리액트 마커 컨텐츠',
+          iconUrl : 'http://map.vworld.kr/images/ol3/marker_blue.png', 
+          text : {
+            offsetX: 0.5,
+            offsetY: 20,
+            font: '12px Calibri,sans-serif',
+            fill: {color: '#000'},
+            stroke: {color: '#fff', width: 2},
+            text: '리액트 마커 텍스트'
+          },
+          attr: { "id": "marker01", "name": "속성명1" }  
+        };
+
+        window.markerLayer.addMarker(window.vw.ol3.markerOption);
+      });
+    }
 
     if (this.state.activeItem === clicked) {
       this.setState({
