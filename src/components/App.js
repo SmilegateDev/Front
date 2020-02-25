@@ -8,6 +8,7 @@ import Notice from './Notice';
 import Search from './Search';
 import Sidebar from './Sidebar';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 class App extends Component {
   constructor(props) {
@@ -20,7 +21,8 @@ class App extends Component {
       postData: null,
       noticeData: null,
       isLogin: false,
-      location: null
+      location: null,
+      replyContents: {}
     }
   }
 
@@ -93,7 +95,14 @@ class App extends Component {
   
       axios.get("/post/getMyPost", headers)
       .then(res => {
-        this.setState({ postData: res.data });
+        const postArr = res.data.Post;
+        const likeArr = res.data.isLiked;
+
+        for (let i = 0; i < postArr.length; i++) {
+          postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+        }
+
+        this.setState({ postData: postArr }); 
       })
       .catch(err => {
         alert(err);
@@ -154,6 +163,143 @@ class App extends Component {
     }
   }
 
+  toggleLike = (e) => {
+    const data = {
+      objectId: e.currentTarget.dataset.id
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    const index = e.currentTarget.dataset.index;
+
+    axios.post("/post/clickLike", data, headers)
+    .then(res => {
+      if (res.data.code === 200) {
+        let newPost = this.state.postData.slice();
+
+        if (res.data.message === "like") {
+          newPost[index]['isLiked'] = 1;
+          newPost[index]['likes_num']++;
+        } else if (res.data.message === "unlike") {
+          newPost[index]['isLiked'] = 0;
+          newPost[index]['likes_num']--;
+        }
+
+        this.setState({postData: newPost });
+      } else {
+        alert(res.data.message);
+      }
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+
+  handleReplyChange = (e) => {
+    let newReply = this.state.replyContents;
+
+    newReply[e.currentTarget.dataset.id] = e.currentTarget.value;
+
+    this.setState({replyContents: newReply});
+  }
+
+  handleReply = (e) => {
+    if (this.state.replyContents[e.currentTarget.dataset.id] === undefined || this.state.replyContents[e.currentTarget.dataset.id].length === 0) {
+      return alert("댓글을 입력해주세요");
+    }
+
+    const data = {
+      objectId: e.currentTarget.dataset.id,
+      replyContents: this.state.replyContents[e.currentTarget.dataset.id]
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    const id = e.currentTarget.dataset.id;
+    const index = e.currentTarget.dataset.index;
+
+    axios.post("/post/createReply", data, headers)
+    .then(res => {
+      if (res.data.code === 200) {
+        if (this.state.postData[index]['replyWriter']) {
+          let newPost = this.state.postData.slice();
+
+          newPost[index]['replyWriter'].push(jwt.decode(localStorage.getItem("token")).nickname);
+          newPost[index]['replyContents'].push(this.state.replyContents[id]);
+          newPost[index]['reply_num']++;
+
+          this.setState({postData: newPost });
+        } else {
+          let newPost = this.state.postData.slice();
+
+          newPost[index]['reply_num']++;
+
+          this.setState({postData: newPost });
+        }
+      } else {
+        alert(res.data.message);
+      }
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+
+  handleGetReply = (e) => {
+    const data = {
+      objectId: e.currentTarget.dataset.id
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    const index = e.currentTarget.dataset.index;
+
+    axios.post("/post/getReply", data, headers)
+    .then(res => {
+      let newPost = this.state.postData.slice();
+
+      const writerArr = Object.keys(res.data).map(function(key) {
+        return [res.data[key].writer];
+      });
+
+      const contentsArr = Object.keys(res.data).map(function(key) {
+        return [res.data[key].replyContents];
+      });
+
+      newPost[index]['replyWriter'] = writerArr;
+      newPost[index]['replyContents'] = contentsArr;
+
+      this.setState({postData: newPost });
+    })
+    .catch(err => {
+      alert("오류가 발생했습니다.");
+    });
+  }
+
+  handleFoldReply = (e) => {
+    let newPost = this.state.postData.slice();
+
+    newPost[e.currentTarget.dataset.index]['replyWriter'] = null;
+    newPost[e.currentTarget.dataset.index]['replyContents'] = null;
+
+    this.setState({postData: newPost });
+  }
+
   render() {
     return (
       <Fragment>
@@ -163,7 +309,7 @@ class App extends Component {
         <Login activeItem={this.state.activeItem} setLoginState={this.setLoginState} setActiveItem={this.setActiveItem}/>
         <Join activeItem={this.state.activeItem} setActiveItem={this.setActiveItem} />
         <Post activeItem={this.state.activeItem} />
-        <MyPost activeItem={this.state.activeItem} postData={this.state.postData} />
+        <MyPost activeItem={this.state.activeItem} postData={this.state.postData} toggleLike={this.toggleLike} handleReplyChange={this.handleReplyChange} handleReply={this.handleReply} handleGetReply={this.handleGetReply} handleFoldReply={this.handleFoldReply} />
         <Notice activeItem={this.state.activeItem} noticeData={this.state.noticeData} />
         <Search activeItem={this.state.activeItem} />
       </Fragment>
