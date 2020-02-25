@@ -161,6 +161,9 @@ aside {
 .custom-search-form {
   font-size: 120% !important;
 }
+.custom-reply-form {
+  font-size: 100% !important;
+}
 .custom-login-btn {
   margin-top: 20px;
   font-size: 150% !important;
@@ -209,4 +212,7 @@ aside {
 }
 .user-profile-btn {
   font-size: 100% !important;
+}
+.custom-reply-btn {
+  font-size: 150%;
 }

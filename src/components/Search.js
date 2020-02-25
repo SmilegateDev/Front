@@ -61,8 +61,15 @@ class Search extends Component {
 
     axios.post("/post/getUserPost", data, headers)
     .then(res => {
+      const postArr = res.data.Post;
+      const likeArr = res.data.isLiked;
+
+      for (let i = 0; i < postArr.length; i++) {
+        postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+      }
+
       this.setState({ userFollow: res.data.isFollowed });
-      this.setState({ userPost: res.data.Post });
+      this.setState({ userPost: postArr }); 
     })
     .catch(err => {
       alert(err);
@@ -112,6 +119,44 @@ class Search extends Component {
     }
   }
 
+  toggleLike = (e) => {
+    const data = {
+      objectId: e.currentTarget.dataset.id
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    const isLiked = e.currentTarget.dataset.value;
+    const index = e.currentTarget.dataset.index;
+
+    axios.post("/post/clickLike", data, headers)
+    .then(res => {
+      if (res.data.code === 200) {
+        let newPost = this.state.userPost.slice();
+
+        if (isLiked === "0") {
+          newPost[index]['isLiked'] = 1;
+          newPost[index]['likes_num']++;
+        } else {
+          newPost[index]['isLiked'] = 0;
+          newPost[index]['likes_num']--;
+        }
+
+        this.setState({userPost: newPost });
+      } else {
+        alert(res.data.message);
+      }
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+
   render() {
     return (
       <Fragment>
@@ -145,8 +190,33 @@ class Search extends Component {
           }
           <article className="custom-article">
             <div className="mainarticle mt-2">
-              {this.state.userPost ? this.state.userPost.map(post => {
-                return <div className="text-left mt-3"><h2>{ post.title }</h2><div><img src="default.jpg" className="img-fluid my-4" alt="default"/></div><div>{ post.contents }</div><hr className="post-hr my-4" /></div>
+              {this.state.userPost ? this.state.userPost.map((post, index) => {
+                return <div className="text-left mt-3">
+                  <h2>{ post.title }</h2>
+                  <div><img src="default.jpg" className="img-fluid my-4" alt="default"/></div>
+                  <div className="mb-4">
+                    {post.isLiked === 0 ?
+                      <button className="btn btn-success user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-value={post.isLiked} data-index={index}>좋아요</button> :
+                      <button className="btn btn-danger user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-value={post.isLiked} data-index={index}>좋아요 취소</button>
+                    }
+                  </div>
+                  <div>{ post.likes_num }명이 좋아합니다.</div>
+                  <div className="mt-2">{this.state.searchTarget}) { post.contents }</div><div className="mt-4">댓글 { post.reply_num }개 모두 보기</div>
+                  <div className="mt-3">
+                    <form method="POST" onSubmit={e => { e.preventDefault(); }}>
+                      <div className="form-group">
+                        <div className="input-group">
+                          <input type="text" className="form-control custom-reply-form" name="reply" id="reply" placeholder="댓글 달기..." />
+                          <div className="input-group-append">
+                            <span className="input-group-text"><i class="far fa-comment-dots custom-reply-btn"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <hr className="post-hr my-4" />
+              </div>
               }) : null}
             </div>
           </article>
