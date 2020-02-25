@@ -18,11 +18,13 @@ class Search extends Component {
     this.setState({ [e.currentTarget.name]: e.currentTarget.value });
   }
 
-  pressEnter = (e) => {
+  pressSearchEnter = (e) => {
     if (e.key === "Enter") {
       this.handleSearch();
     }
   }
+
+
 
   handleSearch = (e) => {
     const data = {
@@ -131,7 +133,6 @@ class Search extends Component {
       }
     };
 
-    const isLiked = e.currentTarget.dataset.value;
     const index = e.currentTarget.dataset.index;
 
     axios.post("/post/clickLike", data, headers)
@@ -139,10 +140,10 @@ class Search extends Component {
       if (res.data.code === 200) {
         let newPost = this.state.userPost.slice();
 
-        if (isLiked === "0") {
+        if (res.data.message === "like") {
           newPost[index]['isLiked'] = 1;
           newPost[index]['likes_num']++;
-        } else {
+        } else if (res.data.message === "unlike") {
           newPost[index]['isLiked'] = 0;
           newPost[index]['likes_num']--;
         }
@@ -165,7 +166,7 @@ class Search extends Component {
           <article className="custom-article">
             <div className="mainarticle mt-5">
               <form method="POST" className="mb-5" onSubmit={e => { e.preventDefault(); }}>
-                <input type="text" className="form-control custom-search-form" name="nickname" id="nickname" placeholder="닉네임 검색" onChange={this.handleChange} onKeyPress={ this.pressEnter } />
+                <input type="text" className="form-control custom-search-form" name="nickname" id="nickname" placeholder="닉네임 검색" onChange={this.handleChange} onKeyPress={ this.pressSearchEnter } />
                 <button type="button" className="btn btn-success btn-block custom-search-btn" onClick={this.handleSearch}>검색</button>
               </form>
               {this.state.userList ? this.state.userList.map(user => {
@@ -196,8 +197,8 @@ class Search extends Component {
                   <div><img src="default.jpg" className="img-fluid my-4" alt="default"/></div>
                   <div className="mb-4">
                     {post.isLiked === 0 ?
-                      <button className="btn btn-success user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-value={post.isLiked} data-index={index}>좋아요</button> :
-                      <button className="btn btn-danger user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-value={post.isLiked} data-index={index}>좋아요 취소</button>
+                      <button className="btn btn-success user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index}>좋아요</button> :
+                      <button className="btn btn-danger user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index}>좋아요 취소</button>
                     }
                   </div>
                   <div>{ post.likes_num }명이 좋아합니다.</div>
