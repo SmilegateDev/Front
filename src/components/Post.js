@@ -24,7 +24,9 @@ class Post extends Component {
 
     const data = {
       title: this.state.title,
-      content: this.state.content
+      content: this.state.content,
+      lati: this.props.location[0],
+      long: this.props.location[1]
     }
 
     const headers = {
