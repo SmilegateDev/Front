@@ -18,6 +18,10 @@ class Post extends Component {
   }
 
   handlePost = () => {
+    if (this.props.location === null) {
+      return alert("게시물을 남길 위치를 지도에 클릭해주세요.");
+    }
+
     const data = {
       title: this.state.title,
       content: this.state.content
@@ -37,6 +41,9 @@ class Post extends Component {
     .catch(err => {
       alert(err);
     });
+
+    this.props.setLocationNull();
+    window.markerLayer.removeAllMarker();
   }
 
   render() {

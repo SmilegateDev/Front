@@ -15,7 +15,6 @@ class App extends Component {
     super(props);
 
     this.state = {
-      map: null,
       activeItem: null,
       feedData: null,
       postData: null,
@@ -38,7 +37,29 @@ class App extends Component {
 
     const vmap = new window.vw.ol3.Map("vmap",  window.vw.ol3.MapOptions);
 
-    this.setState({map: vmap});
+    vmap.on('click', (evt) => {
+      if (this.state.activeItem === "post-on") {
+        this.setState({location: evt.coordinate});
+
+        if (!window.markerLayer) {
+          window.markerLayer = new window.vw.ol3.layer.Marker(vmap);
+          vmap.addLayer(window.markerLayer);
+        } else {
+          window.markerLayer.removeAllMarker();
+        }
+
+        window.vw.ol3.markerOption = {
+          x : evt.coordinate[0],
+          y : evt.coordinate[1],
+          epsg : "EPSG:900913",
+          title : '여기에 글 남기기',
+          iconUrl : 'http://map.vworld.kr/images/ol3/marker_blue.png'
+        };
+
+        window.markerLayer.addMarker(window.vw.ol3.markerOption);
+        window.markerLayer.hidePop();
+      }
+    });
 
     if (localStorage.getItem("token") !== null) {
       this.setState({
@@ -66,11 +87,17 @@ class App extends Component {
       noticeData: null
     });
   }
+
+  setLocationNull = () => {
+    this.setState({
+      location: null
+    });
+  }
   
   handleItemClick = (e) => {
     const clicked = e.currentTarget.id;
 
-    if (clicked === "feed-on" && this.state.activeItem !== clicked) {
+    if (clicked === "feed-on" && this.state.activeItem !== clicked) {      
       const headers = {
         headers: {
           'Content-Type': 'application/json',
@@ -121,34 +148,6 @@ class App extends Component {
       })
       .catch(err => {
         alert(err);
-      });
-    } else if (clicked === "post-on" && this.state.activeItem !== clicked) {
-      this.state.map.on('click', (evt) => {
-        alert(window.markerLayer);
-        this.setState({location: evt.coordinate});
-
-        window.markerLayer = new window.vw.ol3.layer.Marker(this.state.map);
-        this.state.map.addLayer(window.markerLayer);
-
-        window.vw.ol3.markerOption = {
-          x : evt.coordinate[0],
-          y : evt.coordinate[1],
-          epsg : "EPSG:900913",
-          title : '리액트 마커 타이틀',
-          contents : '리액트 마커 컨텐츠',
-          iconUrl : 'http://map.vworld.kr/images/ol3/marker_blue.png', 
-          text : {
-            offsetX: 0.5,
-            offsetY: 20,
-            font: '12px Calibri,sans-serif',
-            fill: {color: '#000'},
-            stroke: {color: '#fff', width: 2},
-            text: '리액트 마커 텍스트'
-          },
-          attr: { "id": "marker01", "name": "속성명1" }  
-        };
-
-        window.markerLayer.addMarker(window.vw.ol3.markerOption);
       });
     }
 
@@ -308,7 +307,7 @@ class App extends Component {
         <Feed activeItem={this.state.activeItem} feedData={this.state.feedData} />
         <Login activeItem={this.state.activeItem} setLoginState={this.setLoginState} setActiveItem={this.setActiveItem}/>
         <Join activeItem={this.state.activeItem} setActiveItem={this.setActiveItem} />
-        <Post activeItem={this.state.activeItem} />
+        <Post activeItem={this.state.activeItem} location={this.state.location} setLocationNull={this.setLocationNull}/>
         <MyPost activeItem={this.state.activeItem} postData={this.state.postData} toggleLike={this.toggleLike} handleReplyChange={this.handleReplyChange} handleReply={this.handleReply} handleGetReply={this.handleGetReply} handleFoldReply={this.handleFoldReply} />
         <Notice activeItem={this.state.activeItem} noticeData={this.state.noticeData} />
         <Search activeItem={this.state.activeItem} />
