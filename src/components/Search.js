@@ -307,7 +307,7 @@ class Search extends Component {
                     <Fragment>
                       <div className="mt-4 get-reply mb-3" onClick={this.handleFoldReply} data-index={index}>댓글 접기</div>
                         {post.replyWriter.map((writer, index) => {
-                          return <div>{writer}) {post.replyContents[index]}</div>
+                          return <div><span className="custom-user-list" onClick={this.handleUserPost}>{writer}</span>) {post.replyContents[index]}</div>
                         })}
                     </Fragment> :
                     <div className="mt-4 get-reply" data-id={post._id} onClick={this.handleGetReply} data-index={index}>댓글 { post.reply_num }개 모두 보기</div>
