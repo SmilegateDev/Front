@@ -151,12 +151,14 @@ class App extends Component {
       });
     }
 
-    if (clicked !== "post-on") {
-      this.setLocationNull();
-      window.markerLayer.removeAllMarker();
-    } else if (clicked === "post-on" && this.state.activeItem === clicked) {
-      this.setLocationNull();
-      window.markerLayer.removeAllMarker();
+    if (window.markerLayer) {
+      if (clicked !== "post-on") {
+        this.setLocationNull();
+        window.markerLayer.removeAllMarker();
+      } else if (clicked === "post-on" && this.state.activeItem === clicked) {
+        this.setLocationNull();
+        window.markerLayer.removeAllMarker();
+      }
     }
 
     if (this.state.activeItem === clicked) {
