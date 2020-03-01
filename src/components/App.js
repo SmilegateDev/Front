@@ -3,6 +3,7 @@ import Feed from './Feed';
 import Login from './Login';
 import Join from './Join';
 import Post from './Post';
+import Profile from './Profile';
 import MyPost from './MyPost';
 import Notice from './Notice';
 import Search from './Search';
@@ -58,6 +59,8 @@ class App extends Component {
 
         window.markerLayer.addMarker(window.vw.ol3.markerOption);
         window.markerLayer.hidePop();
+      } else {
+        this.setState({ activeItem: null });
       }
     });
 
@@ -321,6 +324,7 @@ class App extends Component {
         <MyPost activeItem={this.state.activeItem} postData={this.state.postData} toggleLike={this.toggleLike} handleReplyChange={this.handleReplyChange} handleReply={this.handleReply} handleGetReply={this.handleGetReply} handleFoldReply={this.handleFoldReply} />
         <Notice activeItem={this.state.activeItem} noticeData={this.state.noticeData} />
         <Search activeItem={this.state.activeItem} />
+        <Profile activeItem={this.state.activeItem} />
       </Fragment>
     );
   }

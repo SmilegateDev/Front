@@ -113,6 +113,16 @@ aside {
   transition: left .25s linear;
   font-size: 120%;
 }
+#profile {
+  background: #333;
+  width: 400px;
+  height: 100%;
+  top: 0;
+  left: -400px;
+  position: fixed;
+  transition: left .25s linear;
+  font-size: 150%;
+}
 #user-post {
   background: #333;
   width: 400px;

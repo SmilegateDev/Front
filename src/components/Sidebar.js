@@ -22,6 +22,9 @@ class Sidebar extends Component {
                 <li id="feed-on" onClick={this.props.handleItemClick}>
                   <i className="fas fa-shoe-prints font-size-350"></i><p className="custom-p">피드</p>
                 </li>
+                <li id="profile-on" onClick={this.props.handleItemClick}>
+                  <i class="fas fa-address-card font-size-350"></i><p className="custom-p">내 프로필</p>
+                </li>
                 <li id="myPost-on" onClick={this.props.handleItemClick}>
                   <i class="fas fa-list-ul font-size-350"></i><p className="custom-p">내 게시물</p>
                 </li>
