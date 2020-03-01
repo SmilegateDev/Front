@@ -13,7 +13,12 @@ class Profile extends Component {
         <div className="head custom-head">내 프로필</div><hr className="feed-hr" />
         <article className="custom-article">
           <div className="mainarticle">
-            <h2 className="mt-4">닉네임: {jwt.decode(localStorage.getItem("token")).nickname}</h2>
+            <h2 className="mt-4">닉네임:&nbsp;
+              {localStorage.getItem("token") !== null ? 
+                jwt.decode(localStorage.getItem("token")).nickname :
+                null
+              }
+            </h2>
             <h3>내가 팔로우 중인 사람들 보기</h3>
             <h3>나를 팔로우 중인 사람들 보기</h3>
           </div>

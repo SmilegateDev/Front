@@ -70,7 +70,7 @@ class Join extends Component {
       }
     })
     .catch(err => {
-      alert(err);
+      alert(err.status);
     });
   }
 
