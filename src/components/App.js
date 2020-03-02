@@ -22,7 +22,10 @@ class App extends Component {
       noticeData: null,
       isLogin: false,
       location: null,
-      replyContents: {}
+      replyContents: {},
+      year: null,
+      month: null,
+      date: null
     }
   }
 
@@ -100,7 +103,13 @@ class App extends Component {
   handleItemClick = (e) => {
     const clicked = e.currentTarget.id;
 
-    if (clicked === "feed-on" && this.state.activeItem !== clicked) {      
+    if (clicked === "feed-on" && this.state.activeItem !== clicked) {   
+      const data = {
+        year: this.state.year,
+        month: this.state.month,
+        date: this.state.date
+      }
+
       const headers = {
         headers: {
           'Content-Type': 'application/json',
@@ -108,9 +117,17 @@ class App extends Component {
         }
       };
   
-      axios.get("/feed/getFeed", headers)
+      axios.post("/feed/getFeed", data, headers)
       .then(res => {
-        this.setState({ feedData: res.data });
+        alert(res.data.isLastFeed);
+
+        this.setState({
+          year: res.data.Year,
+          month: res.data.Month,
+          date: res.data.Date
+        });
+
+        return this.setState({ feedData: res.data.Feed });
       })
       .catch(err => {
         alert(err);
@@ -132,7 +149,7 @@ class App extends Component {
           postArr[i]['isLiked'] = likeArr[postArr[i]._id];
         }
 
-        this.setState({ postData: postArr }); 
+        return this.setState({ postData: postArr }); 
       })
       .catch(err => {
         alert(err);
