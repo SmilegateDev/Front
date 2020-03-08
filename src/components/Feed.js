@@ -35,7 +35,7 @@ class Feed extends Component {
       window.removeEventListener("wheel", this.handleScroll);
       setTimeout(() => {
         this.addScrollEvent();
-      }, 500);
+      }, 1000);
     }
   };
 
