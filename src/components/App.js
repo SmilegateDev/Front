@@ -264,7 +264,8 @@ class App extends Component {
 
   toggleLike = (e) => {
     const data = {
-      objectId: e.currentTarget.dataset.id
+      objectId: e.currentTarget.dataset.id,
+      userId: e.currentTarget.dataset.user
     }
 
     const headers = {
@@ -401,7 +402,8 @@ class App extends Component {
 
   feedToggleLike = (e) => {
     const data = {
-      objectId: e.currentTarget.dataset.id
+      objectId: e.currentTarget.dataset.id,
+      userId: e.currentTarget.dataset.user
     }
 
     const headers = {

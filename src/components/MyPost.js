@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
-class Feed extends Component {
+class MyPost extends Component {
   constructor(props) {
     super(props);
 
@@ -91,7 +91,8 @@ class Feed extends Component {
 
   toggleLike = (e) => {
     const data = {
-      objectId: e.currentTarget.dataset.id
+      objectId: e.currentTarget.dataset.id,
+      userId: e.currentTarget.dataset.user
     }
 
     const headers = {
@@ -239,8 +240,8 @@ class Feed extends Component {
                     <div><img src="default.jpg" className="img-fluid my-4" alt="default"/></div>
                     <div className="mb-4">
                       {post.isLiked === 0 ?
-                        <button className="btn btn-success user-profile-btn" onClick={this.props.toggleLike} data-id={post._id} data-index={index}>좋아요</button> :
-                        <button className="btn btn-danger user-profile-btn" onClick={this.props.toggleLike} data-id={post._id} data-index={index}>좋아요 취소</button>
+                        <button className="btn btn-success user-profile-btn" onClick={this.props.toggleLike} data-id={post._id} data-index={index} data-user={post.userId}>좋아요</button> :
+                        <button className="btn btn-danger user-profile-btn" onClick={this.props.toggleLike} data-id={post._id} data-index={index} data-user={post.userId}>좋아요 취소</button>
                       }
                     </div>
                     <div>{ post.likes_num }명이 좋아합니다.</div>
@@ -295,8 +296,8 @@ class Feed extends Component {
                   <div><img src="default.jpg" className="img-fluid my-4" alt="default"/></div>
                   <div className="mb-4">
                     {post.isLiked === 0 ?
-                      <button className="btn btn-success user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index}>좋아요</button> :
-                      <button className="btn btn-danger user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index}>좋아요 취소</button>
+                      <button className="btn btn-success user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index} data-user={post.userId}>좋아요</button> :
+                      <button className="btn btn-danger user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index} data-user={post.userId}>좋아요 취소</button>
                     }
                   </div>
                   <div>{ post.likes_num }명이 좋아합니다.</div>
@@ -334,4 +335,4 @@ class Feed extends Component {
   }
 }
 
-export default Feed;
+export default MyPost;

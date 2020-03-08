@@ -16,11 +16,13 @@ class Feed extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener("wheel", this.handleScroll);
+    const feedDiv = document.getElementById("feed");
+    feedDiv.addEventListener("wheel", this.handleScroll);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("wheel", this.handleScroll);
+    const feedDiv = document.getElementById("feed");
+    feedDiv.removeEventListener("wheel", this.handleScroll);
   }
 
   handleScroll = () => {
@@ -32,7 +34,7 @@ class Feed extends Component {
 
     if ((scrollHeight - innerHeight - scrollTop < 300) && this.props.isLastFeed !== 1) {
       this.props.getMoreFeedData();
-      window.removeEventListener("wheel", this.handleScroll);
+      feedDiv.removeEventListener("wheel", this.handleScroll);
       setTimeout(() => {
         this.addScrollEvent();
       }, 1000);
@@ -40,7 +42,8 @@ class Feed extends Component {
   };
 
   addScrollEvent = () => {
-    window.addEventListener("wheel", this.handleScroll);
+    const feedDiv = document.getElementById("feed");
+    feedDiv.addEventListener("wheel", this.handleScroll);
   }
 
   handleUserPost = (e) => {
@@ -119,7 +122,8 @@ class Feed extends Component {
 
   toggleLike = (e) => {
     const data = {
-      objectId: e.currentTarget.dataset.id
+      objectId: e.currentTarget.dataset.id,
+      userId: e.currentTarget.dataset.user
     }
 
     const headers = {
@@ -267,8 +271,8 @@ class Feed extends Component {
                   <div><img src="default.jpg" className="img-fluid my-4" alt="default"/></div>
                   <div className="mb-4">
                     {feed.isLiked === 0 ?
-                      <button className="btn btn-success user-profile-btn" onClick={this.props.toggleLike} data-id={feed._id} data-index={index}>좋아요</button> :
-                      <button className="btn btn-danger user-profile-btn" onClick={this.props.toggleLike} data-id={feed._id} data-index={index}>좋아요 취소</button>
+                      <button className="btn btn-success user-profile-btn" onClick={this.props.toggleLike} data-id={feed._id} data-index={index} data-user={feed.userId}>좋아요</button> :
+                      <button className="btn btn-danger user-profile-btn" onClick={this.props.toggleLike} data-id={feed._id} data-index={index} data-user={feed.userId}>좋아요 취소</button>
                     }
                   </div>
                   <div>{ feed.likes_num }명이 좋아합니다.</div>
@@ -327,8 +331,8 @@ class Feed extends Component {
                   <div><img src="default.jpg" className="img-fluid my-4" alt="default"/></div>
                   <div className="mb-4">
                     {post.isLiked === 0 ?
-                      <button className="btn btn-success user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index}>좋아요</button> :
-                      <button className="btn btn-danger user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index}>좋아요 취소</button>
+                      <button className="btn btn-success user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index} data-user={post.userId}>좋아요</button> :
+                      <button className="btn btn-danger user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index} data-user={post.userId}>좋아요 취소</button>
                     }
                   </div>
                   <div>{ post.likes_num }명이 좋아합니다.</div>
