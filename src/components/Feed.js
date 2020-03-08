@@ -244,7 +244,7 @@ class Feed extends Component {
                     }
                   </div>
                   <div>{ feed.likes_num }명이 좋아합니다.</div>
-                  <div className="mt-2">{feed.writer}) { feed.contents }</div>
+                  <div className="mt-2"><span className="custom-user-list" onClick={this.handleUserPost}>{feed.writer}</span>) { feed.contents }</div>
                   { feed.replyWriter ?
                     <Fragment>
                       <div className="mt-4 get-reply mb-3" onClick={this.props.handleFoldReply} data-index={index}>댓글 접기</div>
