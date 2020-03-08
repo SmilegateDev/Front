@@ -15,6 +15,34 @@ class Feed extends Component {
     }
   }
 
+  componentDidMount() {
+    window.addEventListener("wheel", this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("wheel", this.handleScroll);
+  }
+
+  handleScroll = () => {
+    const feedDiv = document.getElementById("feed");
+
+    const { innerHeight } = window;
+    const { scrollHeight } = feedDiv;
+    const { scrollTop } = feedDiv;
+
+    if ((scrollHeight - innerHeight - scrollTop < 300) && this.props.isLastFeed !== 1) {
+      this.props.getMoreFeedData();
+      window.removeEventListener("wheel", this.handleScroll);
+      setTimeout(() => {
+        this.addScrollEvent();
+      }, 500);
+    }
+  };
+
+  addScrollEvent = () => {
+    window.addEventListener("wheel", this.handleScroll);
+  }
+
   handleUserPost = (e) => {
     this.setState({ searchTarget: e.currentTarget.innerHTML });
 
@@ -272,7 +300,7 @@ class Feed extends Component {
               }) : null}
               { this.props.isLastFeed === 1 ?
                 <div className="mb-5">마지막 글입니다.</div> :
-                <button className="btn btn-primary btn-block user-profile-btn mb-5" onClick={this.props.getMoreFeedData}>더 보기</button>
+                null
               }
             </div>
           </article>
