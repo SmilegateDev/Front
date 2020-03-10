@@ -148,7 +148,7 @@ class Feed extends Component {
           newPost[index]['likes_num']--;
         }
 
-        this.setState({userPost: newPost });
+        this.setState({ userPost: newPost });
       } else {
         alert(res.data.message);
       }
@@ -173,7 +173,8 @@ class Feed extends Component {
 
     const data = {
       objectId: e.currentTarget.dataset.id,
-      replyContents: this.state.replyContents[e.currentTarget.dataset.id]
+      replyContents: this.state.replyContents[e.currentTarget.dataset.id],
+      userId: e.currentTarget.dataset.user
     }
 
     const headers = {
@@ -196,13 +197,13 @@ class Feed extends Component {
           newPost[index]['replyContents'].push(this.state.replyContents[id]);
           newPost[index]['reply_num']++;
 
-          this.setState({userPost: newPost });
+          this.setState({ userPost: newPost });
         } else {
           let newPost = this.state.userPost.slice();
 
           newPost[index]['reply_num']++;
 
-          this.setState({userPost: newPost });
+          this.setState({ userPost: newPost });
         }
       } else {
         alert(res.data.message);
@@ -242,7 +243,7 @@ class Feed extends Component {
       newPost[index]['replyWriter'] = writerArr;
       newPost[index]['replyContents'] = contentsArr;
 
-      this.setState({userPost: newPost });
+      this.setState({ userPost: newPost });
     })
     .catch(err => {
       alert("오류가 발생했습니다.");
@@ -255,7 +256,7 @@ class Feed extends Component {
     newPost[e.currentTarget.dataset.index]['replyWriter'] = null;
     newPost[e.currentTarget.dataset.index]['replyContents'] = null;
 
-    this.setState({userPost: newPost });
+    this.setState({ userPost: newPost });
   }
 
   render() {
@@ -292,7 +293,7 @@ class Feed extends Component {
                         <div className="input-group">
                           <input type="text" className="form-control custom-reply-form" name="reply" id="reply" placeholder="댓글 달기..." data-id={feed._id} onChange={this.props.handleReplyChange} />
                           <div className="input-group-append">
-                            <span className="input-group-text custom-reply-btn"><i class="far fa-comment-dots" data-id={feed._id} data-index={index} onClick={this.props.handleReply}></i>
+                            <span className="input-group-text custom-reply-btn"><i class="far fa-comment-dots" data-id={feed._id} data-index={index} data-user={feed.userId} onClick={this.props.handleReply}></i>
                           </span>
                         </div>
                       </div>
@@ -352,7 +353,7 @@ class Feed extends Component {
                         <div className="input-group">
                           <input type="text" className="form-control custom-reply-form" name="reply" id="reply" placeholder="댓글 달기..." data-id={post._id} onChange={this.handleReplyChange} />
                           <div className="input-group-append">
-                            <span className="input-group-text custom-reply-btn"><i class="far fa-comment-dots" data-id={post._id} data-index={index} onClick={this.handleReply}></i>
+                            <span className="input-group-text custom-reply-btn"><i class="far fa-comment-dots" data-id={post._id} data-index={index} data-user={post.userId} onClick={this.handleReply}></i>
                           </span>
                         </div>
                       </div>

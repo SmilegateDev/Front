@@ -290,7 +290,7 @@ class App extends Component {
           newPost[index]['likes_num']--;
         }
 
-        this.setState({postData: newPost });
+        this.setState({ postData: newPost });
       } else {
         alert(res.data.message);
       }
@@ -315,7 +315,8 @@ class App extends Component {
 
     const data = {
       objectId: e.currentTarget.dataset.id,
-      replyContents: this.state.replyContents[e.currentTarget.dataset.id]
+      replyContents: this.state.replyContents[e.currentTarget.dataset.id],
+      userId: e.currentTarget.dataset.user
     }
 
     const headers = {
@@ -338,13 +339,13 @@ class App extends Component {
           newPost[index]['replyContents'].push(this.state.replyContents[id]);
           newPost[index]['reply_num']++;
 
-          this.setState({postData: newPost });
+          this.setState({ postData: newPost });
         } else {
           let newPost = this.state.postData.slice();
 
           newPost[index]['reply_num']++;
 
-          this.setState({postData: newPost });
+          this.setState({ postData: newPost });
         }
       } else {
         alert(res.data.message);
@@ -384,7 +385,7 @@ class App extends Component {
       newPost[index]['replyWriter'] = writerArr;
       newPost[index]['replyContents'] = contentsArr;
 
-      this.setState({postData: newPost });
+      this.setState({ postData: newPost });
     })
     .catch(err => {
       alert("오류가 발생했습니다.");
@@ -397,7 +398,7 @@ class App extends Component {
     newPost[e.currentTarget.dataset.index]['replyWriter'] = null;
     newPost[e.currentTarget.dataset.index]['replyContents'] = null;
 
-    this.setState({postData: newPost });
+    this.setState({ postData: newPost });
   }
 
   feedToggleLike = (e) => {
@@ -453,7 +454,8 @@ class App extends Component {
 
     const data = {
       objectId: e.currentTarget.dataset.id,
-      replyContents: this.state.feedReplyContents[e.currentTarget.dataset.id]
+      replyContents: this.state.feedReplyContents[e.currentTarget.dataset.id],
+      userId: e.currentTarget.dataset.user
     }
 
     const headers = {
