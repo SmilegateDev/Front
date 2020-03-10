@@ -12,7 +12,7 @@ class Notice extends Component {
         <article className="custom-article">
           <div className="mainarticle">
             {this.props.noticeData ? this.props.noticeData.map(notice => {
-              return <div><div>{ notice[1] }</div><hr className="notice-hr" /><div className="notice-comment">{ notice[2] }</div><hr className="notice-hr" /></div>
+              return <div>{ notice.contents }<hr className="notice-hr" /></div>
             }) : '데이터 불러오는 중'}
           </div>
         </article>

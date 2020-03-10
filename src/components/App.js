@@ -135,7 +135,6 @@ class App extends Component {
           date: res.data.Date,
           isLastFeed: res.data.isLastFeed
         });
-
         
         return this.setState({ feedData: feedArr });
       })
@@ -174,8 +173,7 @@ class App extends Component {
   
       axios.get("noti/myNoti", headers)
       .then(res => {
-        alert(res.data.success);
-        alert(res.data.data);
+        this.setState({ noticeData: res.data.data });
       })
       .catch(err => {
         alert(err);
