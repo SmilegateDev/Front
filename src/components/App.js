@@ -172,9 +172,10 @@ class App extends Component {
         }
       };
   
-      axios.get("noticeurl", headers)
+      axios.get("noti/myNoti", headers)
       .then(res => {
-        this.setState({ noticeData: res.data });
+        alert(res.data.success);
+        alert(res.data.data);
       })
       .catch(err => {
         alert(err);

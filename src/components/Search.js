@@ -123,7 +123,8 @@ class Search extends Component {
 
   toggleLike = (e) => {
     const data = {
-      objectId: e.currentTarget.dataset.id
+      objectId: e.currentTarget.dataset.id,
+      userId: e.currentTarget.dataset.user
     }
 
     const headers = {
@@ -173,7 +174,8 @@ class Search extends Component {
 
     const data = {
       objectId: e.currentTarget.dataset.id,
-      replyContents: this.state.replyContents[e.currentTarget.dataset.id]
+      replyContents: this.state.replyContents[e.currentTarget.dataset.id],
+      userId: e.currentTarget.dataset.user
     }
 
     const headers = {
@@ -297,8 +299,8 @@ class Search extends Component {
                   <div><img src="default.jpg" className="img-fluid my-4" alt="default"/></div>
                   <div className="mb-4">
                     {post.isLiked === 0 ?
-                      <button className="btn btn-success user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index}>좋아요</button> :
-                      <button className="btn btn-danger user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index}>좋아요 취소</button>
+                      <button className="btn btn-success user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index} data-user={post.userId}>좋아요</button> :
+                      <button className="btn btn-danger user-profile-btn" onClick={this.toggleLike} data-id={post._id} data-index={index} data-user={post.userId}>좋아요 취소</button>
                     }
                   </div>
                   <div>{ post.likes_num }명이 좋아합니다.</div>
@@ -318,7 +320,7 @@ class Search extends Component {
                         <div className="input-group">
                           <input type="text" className="form-control custom-reply-form" name="reply" id="reply" placeholder="댓글 달기..." data-id={post._id} onChange={this.handleReplyChange} />
                           <div className="input-group-append">
-                            <span className="input-group-text custom-reply-btn"><i class="far fa-comment-dots" data-id={post._id} data-index={index} onClick={this.handleReply}></i>
+                            <span className="input-group-text custom-reply-btn"><i class="far fa-comment-dots" data-id={post._id} data-index={index} data-user={post.userId} onClick={this.handleReply}></i>
                           </span>
                         </div>
                       </div>
