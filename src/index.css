@@ -168,11 +168,20 @@ aside {
 .custom-list {
   margin-top: 30px;
 }
+.font-size-90 {
+  font-size: 90%;
+}
+.font-size-150 {
+  font-size: 150%;
+}
 .font-size-350 {
   font-size: 350%;
 }
 .custom-p {
   margin-top: 10px;
+  font-size: 125%;
+}
+.custom-noti {
   font-size: 125%;
 }
 .custom-head {

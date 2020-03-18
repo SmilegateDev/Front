@@ -66,6 +66,15 @@ class Join extends Component {
         return this.setState({ joinMsg: res.data.msg });
       } else {
         alert("입력하신 이메일로 인증 메일을 전송했습니다.");
+        
+        this.setState({
+          email: "",
+          nickname: "",
+          password: "",
+          passwordCheck: "",
+          joinMsg : ""
+        });
+
         return this.props.setActiveItem("login-on");
       }
     })
@@ -82,10 +91,10 @@ class Join extends Component {
           <div className="mainarticle">
           <img src="brand.png" width="150" alt="brand" />
             <form method="POST" onSubmit={e => { e.preventDefault(); }}>
-              <input type="text" className="form-control custom-form" name="email" id="email" placeholder="이메일" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
-              <input type="text" className="form-control custom-form mt-3" name="nickname" id="nickname" placeholder="닉네임" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
-              <input type="password" className="form-control custom-form mt-3" name="password" id="password" placeholder="비밀번호" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
-              <input type="password" className="form-control custom-form mt-3" name="passwordCheck" id="passwordCheck" placeholder="비밀번호 확인" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
+              <input type="text" className="form-control custom-form" name="email" id="email" placeholder="이메일" onChange={ this.handleChange } onKeyPress={ this.pressEnter } value={ this.state.email } />
+              <input type="text" className="form-control custom-form mt-3" name="nickname" id="nickname" placeholder="닉네임" onChange={ this.handleChange } onKeyPress={ this.pressEnter } value={ this.state.nickname } />
+              <input type="password" className="form-control custom-form mt-3" name="password" id="password" placeholder="비밀번호" onChange={ this.handleChange } onKeyPress={ this.pressEnter } value={ this.state.password } />
+              <input type="password" className="form-control custom-form mt-3" name="passwordCheck" id="passwordCheck" placeholder="비밀번호 확인" onChange={ this.handleChange } onKeyPress={ this.pressEnter } value={ this.state.passwordCheck } />
               <div className="row justify-content-center custom-text-danger mt-4">{ this.state.joinMsg }</div>
               <button type="button" className="btn btn-success btn-block custom-login-btn" onClick={ this.handleJoin }>회원가입</button>
             </form>

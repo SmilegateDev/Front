@@ -8,6 +8,8 @@ import MyPost from './MyPost';
 import Notice from './Notice';
 import Search from './Search';
 import Sidebar from './Sidebar';
+import UserPost from './UserPost';
+
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
@@ -27,7 +29,11 @@ class App extends Component {
       year: null,
       month: null,
       date: null,
-      isLastFeed: null
+      isLastFeed: null,
+      searchTarget: null,
+      userFollow: null,
+      userPost: null,
+      userPostReplyContents: {}
     }
   }
 
@@ -74,6 +80,28 @@ class App extends Component {
         isLogin: true
       });
     }
+
+    /*
+
+    const ws = new WebSocket("ws://117.17.196.142:3007");
+
+    ws.onopen = () => {
+      alert("Connect");
+    }
+
+    ws.onerror = (err) => {
+      alert(err);
+    }
+
+    ws.onmessage = (evt) => {
+      alert(evt.data);
+    }
+
+    ws.onclose = () => {
+      alert("Disconnect");
+    }
+
+    */
   }
 
   setLoginState = (status) => {
@@ -539,19 +567,318 @@ class App extends Component {
     this.setState({ feedData: newFeed });
   }
 
+  handleRemoveNotice = (e) => {
+    const noticeId = e.currentTarget.dataset.id;
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    axios.delete("noti/delNoti/" + noticeId, headers)
+    .then(res => {
+      if (res.data.success !== true) {
+        return alert(res.data.message);
+      }
+    })
+    .catch(err => {
+      return alert(err);
+    });
+
+    axios.get("noti/myNoti", headers)
+    .then(res => {
+      this.setState({ noticeData: res.data.data });
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+
+  // 시작
+
+  handleUserPost = (e) => {
+    this.setState({ 
+      searchTarget: e.currentTarget.innerHTML
+    });
+
+    const data = {
+      nickname: e.currentTarget.innerHTML
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    axios.post("/post/getUserPost", data, headers)
+    .then(res => {
+      const postArr = res.data.Post;
+      const likeArr = res.data.isLiked;
+      let newUserPost = []
+
+      if (postArr) {
+        for (let i = 0; i < postArr.length; i++) {
+          postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+          newUserPost.push(postArr[i]);
+        }
+
+        this.setState({ userPost: newUserPost });
+        this.setState({ userFollow: res.data.isFollowed });
+      } else {
+        this.setState({ userPost: [] });
+        this.setState({ userFollow: res.data.isFollowed });
+      }
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+
+  handleMyPost = (e) => {
+    this.setState({ 
+      searchTarget: jwt.decode(localStorage.getItem("token")).nickname,
+      targetPostId: e.currentTarget.dataset.id
+    });
+
+    const data = {
+      nickname: jwt.decode(localStorage.getItem("token")).nickname
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    axios.post("/post/getUserPost", data, headers)
+    .then(res => {
+      const postArr = res.data.Post;
+      const likeArr = res.data.isLiked;
+
+      for (let i = 0; i < postArr.length; i++) {
+        postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+      }
+
+      this.setState({ userFollow: res.data.isFollowed });
+      this.setState({ userPost: postArr });
+
+      alert(this.targetRef);
+      alert(this.state.targetPostId);
+      alert(typeof(this.state.userPost));
+
+      return this.scrollToRef();
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+
+  scrollToRef = () => {
+    const userPostDiv = document.getElementById("user-post");
+    userPostDiv.scrollTo(0, this.targetRef.current.offsetTop);
+  }
+
+  handleClose = () => {
+    this.setState({ userPost: null });
+  }
+
+  toggleFollow = () => {
+    const data = {
+      nickname: this.state.searchTarget
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    if (this.state.userFollow === 0) {
+      axios.post("/follow/following", data, headers)
+      .then(res => {
+        if (res.data.code === 200) {
+          return this.setState({ userFollow: 1 });
+        } else {
+          return alert(res.data.message);
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
+    } else {
+      axios.post("/follow/unFollowing", data, headers)
+      .then(res => {
+        if (res.data.code === 200) {
+          return this.setState({ userFollow: 0 });
+        } else {
+          return alert(res.data.message);
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
+    }
+  }
+
+  userPostToggleLike = (e) => {
+    const data = {
+      objectId: e.currentTarget.dataset.id,
+      userId: e.currentTarget.dataset.user
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    const index = e.currentTarget.dataset.index;
+
+    axios.post("/post/clickLike", data, headers)
+    .then(res => {
+      if (res.data.code === 200) {
+        let newPost = this.state.userPost.slice();
+
+        if (res.data.message === "like") {
+          newPost[index]['isLiked'] = 1;
+          newPost[index]['likes_num']++;
+        } else if (res.data.message === "unlike") {
+          newPost[index]['isLiked'] = 0;
+          newPost[index]['likes_num']--;
+        }
+
+        this.setState({userPost: newPost });
+      } else {
+        alert(res.data.message);
+      }
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+
+  userPostHandleReplyChange = (e) => {
+    let newReply = this.state.replyContents;
+
+    newReply[e.currentTarget.dataset.id] = e.currentTarget.value;
+
+    this.setState({replyContents: newReply});
+  }
+
+  userPostHandleReply = (e) => {
+    if (this.state.replyContents[e.currentTarget.dataset.id] === undefined || this.state.replyContents[e.currentTarget.dataset.id].length === 0) {
+      return alert("댓글을 입력해주세요");
+    }
+
+    const data = {
+      objectId: e.currentTarget.dataset.id,
+      replyContents: this.state.replyContents[e.currentTarget.dataset.id],
+      userId: e.currentTarget.dataset.user
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    const id = e.currentTarget.dataset.id;
+    const index = e.currentTarget.dataset.index;
+
+    axios.post("/post/createReply", data, headers)
+    .then(res => {
+      if (res.data.code === 200) {
+        if (this.state.userPost[index]['replyWriter']) {
+          let newPost = this.state.userPost.slice();
+
+          newPost[index]['replyWriter'].push(jwt.decode(localStorage.getItem("token")).nickname);
+          newPost[index]['replyContents'].push(this.state.replyContents[id]);
+          newPost[index]['reply_num']++;
+
+          this.setState({userPost: newPost });
+        } else {
+          let newPost = this.state.userPost.slice();
+
+          newPost[index]['reply_num']++;
+
+          this.setState({userPost: newPost });
+        }
+      } else {
+        alert(res.data.message);
+      }
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+
+  userPostHandleGetReply = (e) => {
+    const data = {
+      objectId: e.currentTarget.dataset.id
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    const index = e.currentTarget.dataset.index;
+
+    axios.post("/post/getReply", data, headers)
+    .then(res => {
+      let newPost = this.state.userPost.slice();
+
+      const writerArr = Object.keys(res.data).map(function(key) {
+        return [res.data[key].writer];
+      });
+
+      const contentsArr = Object.keys(res.data).map(function(key) {
+        return [res.data[key].replyContents];
+      });
+
+      newPost[index]['replyWriter'] = writerArr;
+      newPost[index]['replyContents'] = contentsArr;
+
+      this.setState({userPost: newPost });
+    })
+    .catch(err => {
+      alert("오류가 발생했습니다.");
+    });
+  }
+
+  userPostHandleFoldReply = (e) => {
+    let newPost = this.state.userPost.slice();
+
+    newPost[e.currentTarget.dataset.index]['replyWriter'] = null;
+    newPost[e.currentTarget.dataset.index]['replyContents'] = null;
+
+    this.setState({userPost: newPost });
+  }
+
   render() {
     return (
       <Fragment>
         <div id="vmap" />
         <Sidebar handleItemClick={this.handleItemClick} isLogin={this.state.isLogin} setLoginState={this.setLoginState} setActiveItem={this.setActiveItem} setAllDataNull={this.setAllDataNull}/>
-        <Feed activeItem={this.state.activeItem} feedData={this.state.feedData} toggleLike={this.feedToggleLike} handleReplyChange={this.feedHandleReplyChange} handleReply={this.feedHandleReply} handleGetReply={this.feedHandleGetReply} handleFoldReply={this.feedHandleFoldReply} isLastFeed={this.state.isLastFeed} getMoreFeedData={this.getMoreFeedData} />
+        <Feed activeItem={this.state.activeItem} feedData={this.state.feedData} toggleLike={this.feedToggleLike} handleReplyChange={this.feedHandleReplyChange} handleReply={this.feedHandleReply} handleGetReply={this.feedHandleGetReply} handleFoldReply={this.feedHandleFoldReply} isLastFeed={this.state.isLastFeed} getMoreFeedData={this.getMoreFeedData} handleUserPost={this.handleUserPost} />
         <Login activeItem={this.state.activeItem} setLoginState={this.setLoginState} setActiveItem={this.setActiveItem}/>
         <Join activeItem={this.state.activeItem} setActiveItem={this.setActiveItem} />
         <Post activeItem={this.state.activeItem} location={this.state.location} setLocationNull={this.setLocationNull}/>
-        <MyPost activeItem={this.state.activeItem} postData={this.state.postData} toggleLike={this.toggleLike} handleReplyChange={this.handleReplyChange} handleReply={this.handleReply} handleGetReply={this.handleGetReply} handleFoldReply={this.handleFoldReply} />
-        <Notice activeItem={this.state.activeItem} noticeData={this.state.noticeData} />
-        <Search activeItem={this.state.activeItem} />
+        <MyPost activeItem={this.state.activeItem} postData={this.state.postData} toggleLike={this.toggleLike} handleReplyChange={this.handleReplyChange} handleReply={this.handleReply} handleGetReply={this.handleGetReply} handleFoldReply={this.handleFoldReply} handleUserPost={this.handleUserPost} />
+        <Notice activeItem={this.state.activeItem} noticeData={this.state.noticeData} handleRemoveNotice={this.handleRemoveNotice} handleUserPost={this.handleUserPost} />
+        <Search activeItem={this.state.activeItem} handleUserPost={this.handleUserPost} />
         <Profile activeItem={this.state.activeItem} />
+        <UserPost searchTarget={this.state.searchTarget} userFollow={this.state.userFollow} userPost={this.state.userPost} replyContents={this.userPostReplyContents} handleUserPost={this.handleUserPost} handleMyPost={this.handleMyPost} handleClose={this.handleClose} toggleFollow={this.toggleFollow} toggleLike={this.userPostToggleLike} handleReplyChange={this.userPostHandleReplyChange} handleReply={this.userPostHandleReply} handleGetReply={this.userPostHandleGetReply} handleFoldReply={this.userPostHandleFoldReply} />
       </Fragment>
     );
   }

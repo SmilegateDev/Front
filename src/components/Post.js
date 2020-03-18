@@ -38,10 +38,15 @@ class Post extends Component {
 
     axios.post("/post/create", data, headers)
     .then(res => {
-      alert("성공적으로 등록되었습니다.");
+      this.setState({
+        title: "",
+        content: ""
+      });
+
+      return alert("성공적으로 등록되었습니다.");
     })
     .catch(err => {
-      alert(err);
+      return alert(err);
     });
 
     this.props.setLocationNull();
@@ -55,9 +60,9 @@ class Post extends Component {
         <article className="custom-article">
           <div className="mainarticle">
             <form method="POST" onSubmit={e => { e.preventDefault(); }}>
-              <input type="text" className="form-control custom-form mt-4" name="title" id="title" placeholder="제목" onChange={ this.handleChange } />
+              <input type="text" className="form-control custom-form mt-4" name="title" id="title" placeholder="제목" onChange={ this.handleChange } value={ this.state.title } />
               <hr className="post-hr my-4" />
-              <textarea className="form-control custom-form mt-3" name="content" id="content" placeholder="글 내용" onChange={ this.handleChange } rows="10"></textarea>
+              <textarea className="form-control custom-form mt-3" name="content" id="content" placeholder="글 내용" onChange={ this.handleChange } value={ this.state.content } rows="10"></textarea>
               <button type="button" className="btn btn-success btn-block custom-login-btn" onClick={ this.handlePost }>글 작성</button>
             </form>
           </div>

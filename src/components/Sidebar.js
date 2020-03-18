@@ -29,7 +29,8 @@ class Sidebar extends Component {
                   <i class="fas fa-list-ul font-size-350"></i><p className="custom-p">내 게시물</p>
                 </li>
                 <li id="notice-on" className="mt-3" onClick={this.props.handleItemClick}>
-                  <i class="fas fa-user-clock font-size-350"></i><p className="custom-p">알림</p>
+                  <i class="fas fa-bell font-size-350"></i><p className="font-size-150 mb-1 mt-2">0</p>
+                  <p className="custom-noti">알림</p>
                 </li>
                 <li id="post-on" className="mt-3" onClick={this.props.handleItemClick}>
                   <i class="fas fa-paste font-size-350"></i><p className="custom-p">글 작성</p>

@@ -39,7 +39,11 @@ class Login extends Component {
         this.props.setLoginState(true);
         this.props.setActiveItem(null);
 
-        return this.setState({ loginMsg: null });
+        return this.setState({ 
+          email: "",
+          password: "",
+          loginMsg: ""
+        });
       } else {
         return this.setState({ loginMsg: "이메일 혹은 비밀번호가 일치하지 않습니다." });
       }
@@ -56,8 +60,8 @@ class Login extends Component {
           <div className="mainarticle">
             <img src="brand.png" width="150" alt="brand" />
             <form method="POST" onSubmit={e => { e.preventDefault(); }}>
-              <input type="text" className="form-control custom-form" name="email" id="email" placeholder="이메일" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
-              <input type="password" className="form-control custom-form mt-3" name="password" id="password" placeholder="비밀번호" onChange={ this.handleChange } onKeyPress={ this.pressEnter } />
+              <input type="text" className="form-control custom-form" name="email" id="email" placeholder="이메일" onChange={ this.handleChange } onKeyPress={ this.pressEnter } value={ this.state.email } />
+              <input type="password" className="form-control custom-form mt-3" name="password" id="password" placeholder="비밀번호" onChange={ this.handleChange } onKeyPress={ this.pressEnter } value = { this.state.password } />
               <div className="row justify-content-center custom-text-danger mt-4">{ this.state.loginMsg }</div>
               <button type="button" className="btn btn-success btn-block custom-login-btn" onClick={ this.handleLogin }>로그인</button>
             </form>
