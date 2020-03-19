@@ -182,11 +182,15 @@ class App extends Component {
         const postArr = res.data.Post;
         const likeArr = res.data.isLiked;
 
-        for (let i = 0; i < postArr.length; i++) {
+        let newPostArr = []
+
+        for (let i = postArr.length - 1; i >= 0; i--) {
           postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+
+          newPostArr.push(postArr[i]);
         }
 
-        return this.setState({ postData: postArr }); 
+        return this.setState({ postData: newPostArr }); 
       })
       .catch(err => {
         alert(err);
@@ -621,7 +625,7 @@ class App extends Component {
       let newUserPost = []
 
       if (postArr) {
-        for (let i = 0; i < postArr.length; i++) {
+        for (let i = postArr.length - 1; i >= 0; i--) {
           postArr[i]['isLiked'] = likeArr[postArr[i]._id];
           newUserPost.push(postArr[i]);
         }
