@@ -155,6 +155,12 @@ class App extends Component {
 
         for (let i = 0; i < feedArr.length; i++) {
           feedArr[i]['isLiked'] = likeArr[feedArr[i]._id];
+
+          alert(feedArr[i]['file']);
+
+          if (feedArr[i]['file'] !== null) {
+            feedArr[i]['file'] = "http://117.17.196.142:3003/statics/" + feedArr[i]['file']
+          }
         }
 
         this.setState({
@@ -186,6 +192,10 @@ class App extends Component {
 
         for (let i = postArr.length - 1; i >= 0; i--) {
           postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+
+          if (postArr[i]['file'] !== null) {
+            postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+          }
 
           newPostArr.push(postArr[i]);
         }
@@ -627,6 +637,11 @@ class App extends Component {
       if (postArr) {
         for (let i = postArr.length - 1; i >= 0; i--) {
           postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+
+          if (postArr[i]['file'] !== null) {
+            postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+          }
+
           newUserPost.push(postArr[i]);
         }
 

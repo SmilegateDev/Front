@@ -26,7 +26,12 @@ class Login extends Component {
             {this.props.userPost !== null && this.props.userPost.length !== 0 ? this.props.userPost.map((post, index) => {
               return <div className="text-left mt-3" ref={post._id === this.props.targetPostId ? this.props.targetRef : "" }>
                 <h2>{ post.title }</h2>
-                <div><img src="default.jpg" className="img-fluid my-4" alt="default"/></div>
+                <div>
+                  {post.file ?
+                    <img src={post.file} className="img-fluid my-4" alt="default"/> :
+                    <img src="default.jpg" className="img-fluid my-4" alt="default"/>
+                  }
+                </div>
                 <div className="mb-4">
                   {post.isLiked === 0 ?
                     <button className="btn btn-success user-profile-btn" onClick={this.props.toggleLike} data-id={post._id} data-index={index} data-user={post.userId}>좋아요</button> :
