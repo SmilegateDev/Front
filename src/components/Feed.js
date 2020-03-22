@@ -52,7 +52,7 @@ class Feed extends Component {
                     <img src={feed.file} className="img-fluid my-4" alt="default"/> :
                     <img src="default.jpg" className="img-fluid my-4" alt="default"/>
                   }
-                  <img src="default.jpg" className="img-fluid my-4" alt="default"/></div>
+                </div>
                 <div className="mb-4">
                   {feed.isLiked === 0 ?
                     <button className="btn btn-success user-profile-btn" onClick={this.props.toggleLike} data-id={feed._id} data-index={index} data-user={feed.userId}>좋아요</button> :
