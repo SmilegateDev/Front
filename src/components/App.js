@@ -284,6 +284,11 @@ class App extends Component {
 
       for (let i = 0; i < feedArr.length; i++) {
         feedArr[i]['isLiked'] = likeArr[feedArr[i]._id];
+
+        if (feedArr[i]['file'] !== null) {
+          feedArr[i]['file'] = "http://117.17.196.142:3003/statics/" + feedArr[i]['file']
+        }
+        
         exFeedData.push(feedArr[i]);
       }
 
