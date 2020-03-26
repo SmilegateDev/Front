@@ -59,15 +59,15 @@ class Login extends Component {
             socket.emit('client log on', { userId: jwt.decode(localStorage.getItem("token")).id });
 
             socket.on('reply', (data) => {
-              alert(data);
+              alert(data.noticeCount);
             });
 
             socket.on('follow', (data) => {
-              alert(data);
+              alert(data.noticeCount);
             });
 
             socket.on('like', (data) => {
-              alert(data);
+              alert(data.noticeCount);
             });
           })();
 
