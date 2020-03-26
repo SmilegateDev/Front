@@ -84,7 +84,7 @@ class App extends Component {
 
     if (localStorage.getItem("noticeCount") !== null) {
       this.setState({
-        noticeCount: ocalStorage.getItem("noticeCount")
+        noticeCount: localStorage.getItem("noticeCount")
       });
     }
   }
