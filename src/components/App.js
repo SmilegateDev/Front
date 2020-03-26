@@ -111,7 +111,8 @@ class App extends Component {
     this.setState({
       feedData: null,
       postData: null,
-      noticeData: null
+      noticeData: null,
+      userPost: null
     });
   }
 
