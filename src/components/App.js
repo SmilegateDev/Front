@@ -81,6 +81,12 @@ class App extends Component {
         isLogin: true
       });
     }
+
+    if (localStorage.getItem("noticeCount") !== null) {
+      this.setState({
+        noticeCount: ocalStorage.getItem("noticeCount")
+      });
+    }
   }
 
   setNoticeCount = (noticeCount) => {

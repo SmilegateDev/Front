@@ -51,6 +51,8 @@ class Login extends Component {
           this.props.setLoginState(true);
           this.props.setActiveItem(null);
 
+          localStorage.setItem("noticeCount", res.data.noticeCount);
+
           const socket = socketio.connect('http://117.17.196.142:3006');
 
           (() => {
