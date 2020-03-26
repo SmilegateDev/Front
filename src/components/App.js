@@ -33,7 +33,8 @@ class App extends Component {
       searchTarget: null,
       userFollow: null,
       userPost: null,
-      userPostReplyContents: {}
+      userPostReplyContents: {},
+      noticeCount: null
     }
   }
 
@@ -80,28 +81,12 @@ class App extends Component {
         isLogin: true
       });
     }
+  }
 
-    /*
-
-    const ws = new WebSocket("ws://117.17.196.142:3007");
-
-    ws.onopen = () => {
-      alert("Connect");
-    }
-
-    ws.onerror = (err) => {
-      alert(err);
-    }
-
-    ws.onmessage = (evt) => {
-      alert(evt.data);
-    }
-
-    ws.onclose = () => {
-      alert("Disconnect");
-    }
-
-    */
+  setNoticeCount = (noticeCount) => {
+    this.setState({
+      noticeCount: noticeCount
+    });
   }
 
   setLoginState = (status) => {
@@ -688,12 +673,6 @@ class App extends Component {
 
       this.setState({ userFollow: res.data.isFollowed });
       this.setState({ userPost: postArr });
-
-      alert(this.targetRef);
-      alert(this.state.targetPostId);
-      alert(typeof(this.state.userPost));
-
-      return this.scrollToRef();
     })
     .catch(err => {
       alert(err);
@@ -891,13 +870,13 @@ class App extends Component {
     return (
       <Fragment>
         <div id="vmap" />
-        <Sidebar handleItemClick={this.handleItemClick} isLogin={this.state.isLogin} setLoginState={this.setLoginState} setActiveItem={this.setActiveItem} setAllDataNull={this.setAllDataNull}/>
+        <Sidebar handleItemClick={this.handleItemClick} isLogin={this.state.isLogin} setLoginState={this.setLoginState} setActiveItem={this.setActiveItem} setAllDataNull={this.setAllDataNull} noticeCount={this.state.noticeCount} />
         <Feed activeItem={this.state.activeItem} feedData={this.state.feedData} toggleLike={this.feedToggleLike} handleReplyChange={this.feedHandleReplyChange} handleReply={this.feedHandleReply} handleGetReply={this.feedHandleGetReply} handleFoldReply={this.feedHandleFoldReply} isLastFeed={this.state.isLastFeed} getMoreFeedData={this.getMoreFeedData} handleUserPost={this.handleUserPost} />
-        <Login activeItem={this.state.activeItem} setLoginState={this.setLoginState} setActiveItem={this.setActiveItem}/>
+        <Login activeItem={this.state.activeItem} setLoginState={this.setLoginState} setActiveItem={this.setActiveItem} setNoticeCount={this.setNoticeCount} />
         <Join activeItem={this.state.activeItem} setActiveItem={this.setActiveItem} />
         <Post activeItem={this.state.activeItem} location={this.state.location} setLocationNull={this.setLocationNull}/>
         <MyPost activeItem={this.state.activeItem} postData={this.state.postData} toggleLike={this.toggleLike} handleReplyChange={this.handleReplyChange} handleReply={this.handleReply} handleGetReply={this.handleGetReply} handleFoldReply={this.handleFoldReply} handleUserPost={this.handleUserPost} />
-        <Notice activeItem={this.state.activeItem} noticeData={this.state.noticeData} handleRemoveNotice={this.handleRemoveNotice} handleUserPost={this.handleUserPost} />
+        <Notice activeItem={this.state.activeItem} noticeData={this.state.noticeData} handleRemoveNotice={this.handleRemoveNotice} handleUserPost={this.handleUserPost} handleMyPost={this.handleMyPost} />
         <Search activeItem={this.state.activeItem} handleUserPost={this.handleUserPost} />
         <Profile activeItem={this.state.activeItem} />
         <UserPost searchTarget={this.state.searchTarget} userFollow={this.state.userFollow} userPost={this.state.userPost} replyContents={this.userPostReplyContents} handleUserPost={this.handleUserPost} handleMyPost={this.handleMyPost} handleClose={this.handleClose} toggleFollow={this.toggleFollow} toggleLike={this.userPostToggleLike} handleReplyChange={this.userPostHandleReplyChange} handleReply={this.userPostHandleReply} handleGetReply={this.userPostHandleGetReply} handleFoldReply={this.userPostHandleFoldReply} />

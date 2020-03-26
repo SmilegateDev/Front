@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import socketio from 'socket.io-client';
+import jwt from 'jsonwebtoken';
 
 class Login extends Component {
   constructor(props) {
@@ -35,15 +37,43 @@ class Login extends Component {
       if (res.data.code === 200) {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("refreshToken", res.data.refreshToken);
-  
-        this.props.setLoginState(true);
-        this.props.setActiveItem(null);
 
-        return this.setState({ 
-          email: "",
-          password: "",
-          loginMsg: ""
-        });
+        const headers = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem("token")
+          }
+        };
+
+        axios.get("/noti", headers)
+        .then(res => {
+          this.props.setNoticeCount(res.data.noticeCount);
+          this.props.setLoginState(true);
+          this.props.setActiveItem(null);
+
+          const socket = socketio.connect('http://117.17.196.142:3006');
+
+          (() => {
+            socket.emit('client log on', { userId: jwt.decode(localStorage.getItem("token")).id });
+
+            socket.on('reply', (data) => {
+              alert(data.noticeCount);
+            });
+
+            socket.on('follow', (data) => {
+              alert(data.noticeCount);
+            });
+
+            socket.on('like', (data) => {
+              alert(data.noticeCount);
+            });
+          })();
+
+          return this.setState({ email: "", password: "", loginMsg: "" });
+        })
+        .catch(err => {
+          alert(err);
+        })
       } else {
         return this.setState({ loginMsg: "이메일 혹은 비밀번호가 일치하지 않습니다." });
       }
