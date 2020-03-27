@@ -162,22 +162,24 @@ class App extends Component {
         const feedArr = res.data.Feed;
         const likeArr = res.data.isLiked;
 
-        for (let i = 0; i < feedArr.length; i++) {
-          feedArr[i]['isLiked'] = likeArr[feedArr[i]._id];
+        if (feedArr) {
+          for (let i = 0; i < feedArr.length; i++) {
+            feedArr[i]['isLiked'] = likeArr[feedArr[i]._id];
 
-          if (feedArr[i]['file'] !== null) {
-            feedArr[i]['file'] = "http://117.17.196.142:3003/statics/" + feedArr[i]['file']
+            if (feedArr[i]['file'] !== null) {
+              feedArr[i]['file'] = "http://117.17.196.142:3003/statics/" + feedArr[i]['file']
+            }
           }
-        }
 
-        this.setState({
-          year: res.data.Year,
-          month: res.data.Month,
-          date: res.data.Date,
-          isLastFeed: res.data.isLastFeed
-        });
-        
-        return this.setState({ feedData: feedArr });
+          this.setState({
+            year: res.data.Year,
+            month: res.data.Month,
+            date: res.data.Date,
+            isLastFeed: res.data.isLastFeed
+          });
+          
+          return this.setState({ feedData: feedArr });
+        }
       })
       .catch(err => {
         alert(err);
@@ -204,24 +206,26 @@ class App extends Component {
 
         let newPostArr = []
 
-        for (let i = postArr.length - 1; i >= 0; i--) {
-          postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+        if (postArr) {
+          for (let i = postArr.length - 1; i >= 0; i--) {
+            postArr[i]['isLiked'] = likeArr[postArr[i]._id];
 
-          if (postArr[i]['file'] !== null) {
-            postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+            if (postArr[i]['file'] !== null) {
+              postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+            }
+
+            newPostArr.push(postArr[i]);
           }
 
-          newPostArr.push(postArr[i]);
+          this.setState({
+            myPostYear: res.data.Year,
+            myPostMonth: res.data.Month,
+            myPostDate: res.data.Date,
+            isLastMyPost: res.data.isLastMyPost
+          });
+
+          return this.setState({ postData: newPostArr }); 
         }
-
-        this.setState({
-          myPostYear: res.data.Year,
-          myPostMonth: res.data.Month,
-          myPostDate: res.data.Date,
-          isLastMyPost: res.data.isLastMyPost
-        });
-
-        return this.setState({ postData: newPostArr }); 
       })
       .catch(err => {
         alert(err);
@@ -347,24 +351,26 @@ class App extends Component {
       const feedArr = res.data.Feed;
       const likeArr = res.data.isLiked;
 
-      for (let i = 0; i < feedArr.length; i++) {
-        feedArr[i]['isLiked'] = likeArr[feedArr[i]._id];
+      if (feedArr) {
+        for (let i = 0; i < feedArr.length; i++) {
+          feedArr[i]['isLiked'] = likeArr[feedArr[i]._id];
 
-        if (feedArr[i]['file'] !== null) {
-          feedArr[i]['file'] = "http://117.17.196.142:3003/statics/" + feedArr[i]['file']
+          if (feedArr[i]['file'] !== null) {
+            feedArr[i]['file'] = "http://117.17.196.142:3003/statics/" + feedArr[i]['file']
+          }
+          
+          exFeedData.push(feedArr[i]);
         }
-        
-        exFeedData.push(feedArr[i]);
+
+        this.setState({
+          year: res.data.Year,
+          month: res.data.Month,
+          date: res.data.Date,
+          isLastFeed: res.data.isLastFeed
+        });
+
+        return this.setState({ feedData: exFeedData });
       }
-
-      this.setState({
-        year: res.data.Year,
-        month: res.data.Month,
-        date: res.data.Date,
-        isLastFeed: res.data.isLastFeed
-      });
-
-      return this.setState({ feedData: exFeedData });
     })
     .catch(err => {
       alert(err);
@@ -392,24 +398,26 @@ class App extends Component {
       const postArr = res.data.Post;
       const likeArr = res.data.isLiked;
 
-      for (let i = postArr.length - 1; i >= 0; i--) {
-        postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+      if (postArr) {
+        for (let i = postArr.length - 1; i >= 0; i--) {
+          postArr[i]['isLiked'] = likeArr[postArr[i]._id];
 
-        if (postArr[i]['file'] !== null) {
-          postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+          if (postArr[i]['file'] !== null) {
+            postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+          }
+
+          exMyPostData.push(postArr[i]);
         }
 
-        exMyPostData.push(postArr[i]);
+        this.setState({
+          myPostYear: res.data.Year,
+          myPostMonth: res.data.Month,
+          myPostDate: res.data.Date,
+          isLastMyPost: res.data.isLastMyPost
+        });
+
+        return this.setState({ postData: exMyPostData });
       }
-
-      this.setState({
-        myPostYear: res.data.Year,
-        myPostMonth: res.data.Month,
-        myPostDate: res.data.Date,
-        isLastMyPost: res.data.isLastMyPost
-      });
-
-      return this.setState({ postData: exMyPostData });
     })
     .catch(err => {
       alert(err);
@@ -438,24 +446,26 @@ class App extends Component {
       const postArr = res.data.Post;
       const likeArr = res.data.isLiked;
 
-      for (let i = postArr.length - 1; i >= 0; i--) {
-        postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+      if (postArr) {
+        for (let i = postArr.length - 1; i >= 0; i--) {
+          postArr[i]['isLiked'] = likeArr[postArr[i]._id];
 
-        if (postArr[i]['file'] !== null) {
-          postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+          if (postArr[i]['file'] !== null) {
+            postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+          }
+
+          exUserPostData.push(postArr[i]);
         }
 
-        exUserPostData.push(postArr[i]);
+        this.setState({
+          userPostYear: res.data.Year,
+          userPostMonth: res.data.Month,
+          userPostDate: res.data.Date,
+          isLastUserPost: res.data.isLastUserPost
+        });
+
+        return this.setState({ userPost: exUserPostData });
       }
-
-      this.setState({
-        userPostYear: res.data.Year,
-        userPostMonth: res.data.Month,
-        userPostDate: res.data.Date,
-        isLastUserPost: res.data.isLastUserPost
-      });
-
-      this.setState({ userPost: exUserPostData });
     })
     .catch(err => {
       alert(err);
@@ -799,25 +809,27 @@ class App extends Component {
       const likeArr = res.data.isLiked;
       let newUserPost = []
 
-      for (let i = postArr.length - 1; i >= 0; i--) {
-        postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+      if (postArr) {
+        for (let i = postArr.length - 1; i >= 0; i--) {
+          postArr[i]['isLiked'] = likeArr[postArr[i]._id];
 
-        if (postArr[i]['file'] !== null) {
-          postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+          if (postArr[i]['file'] !== null) {
+            postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+          }
+
+          newUserPost.push(postArr[i]);
         }
 
-        newUserPost.push(postArr[i]);
+        this.setState({ userPost: newUserPost });
+        this.setState({ userFollow: res.data.isFollowed });
+
+        this.setState({
+          userPostYear: res.data.Year,
+          userPostMonth: res.data.Month,
+          userPostDate: res.data.Date,
+          isLastUserPost: res.data.isLastUserPost
+        });
       }
-
-      this.setState({ userPost: newUserPost });
-      this.setState({ userFollow: res.data.isFollowed });
-
-      this.setState({
-        userPostYear: res.data.Year,
-        userPostMonth: res.data.Month,
-        userPostDate: res.data.Date,
-        isLastUserPost: res.data.isLastUserPost
-      });
     })
     .catch(err => {
       alert(err);
@@ -846,12 +858,14 @@ class App extends Component {
       const postArr = res.data.Post;
       const likeArr = res.data.isLiked;
 
-      for (let i = 0; i < postArr.length; i++) {
-        postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+      if (postArr) {
+        for (let i = 0; i < postArr.length; i++) {
+          postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+        }
+  
+        this.setState({ userFollow: res.data.isFollowed });
+        this.setState({ userPost: postArr });
       }
-
-      this.setState({ userFollow: res.data.isFollowed });
-      this.setState({ userPost: postArr });
     })
     .catch(err => {
       alert(err);
