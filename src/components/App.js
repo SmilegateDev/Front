@@ -80,7 +80,16 @@ class App extends Component {
         window.markerLayer.addMarker(window.vw.ol3.markerOption);
         window.markerLayer.hidePop();
       } else {
-        this.setState({ activeItem: null });
+        this.setState({
+          activeItem: null,
+          userPost: null,
+          userPostReplyContents: {},
+          userFollow: null,
+          userPostYear: null,
+          userPostMonth: null,
+          userPostDate: null,
+          isLastUserPost: null
+        });
       }
     });
 
