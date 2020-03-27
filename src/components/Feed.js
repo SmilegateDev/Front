@@ -1,6 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import axios from "axios";
-import jwt from "jsonwebtoken";
 
 class Feed extends Component {
   constructor(props) {

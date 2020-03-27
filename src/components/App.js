@@ -30,6 +30,14 @@ class App extends Component {
       month: null,
       date: null,
       isLastFeed: null,
+      myPostYear: null,
+      myPostMonth: null,
+      myPostDate: null,
+      isLastMyPost: null,
+      userPostYear: null,
+      userPostMonth: null,
+      userPostDate: null,
+      isLastUserPost: null,
       searchTarget: null,
       userFollow: null,
       userPost: null,
@@ -166,6 +174,13 @@ class App extends Component {
         alert(err);
       });
     } else if (clicked === "myPost-on" && this.state.activeItem !== clicked) {
+      const data = {
+        year: this.state.myPostYear,
+        month: this.state.myPostMonth,
+        date: this.state.myPostDate,
+        isLastMyPost: this.state.isLastMyPost
+      }
+
       const headers = {
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +188,7 @@ class App extends Component {
         }
       };
   
-      axios.get("/post/getMyPost", headers)
+      axios.post("/post/getMyPost", data, headers)
       .then(res => {
         const postArr = res.data.Post;
         const likeArr = res.data.isLiked;
@@ -189,6 +204,13 @@ class App extends Component {
 
           newPostArr.push(postArr[i]);
         }
+
+        this.setState({
+          myPostYear: res.data.Year,
+          myPostMonth: res.data.Month,
+          myPostDate: res.data.Date,
+          isLastMyPost: res.data.isLastMyPost
+        });
 
         return this.setState({ postData: newPostArr }); 
       })
@@ -229,6 +251,48 @@ class App extends Component {
         month: null,
         date: null,
         isLastFeed: null
+      });
+    }
+  
+    if (clicked !== "myPost-on") {
+      this.setState({
+        postData: null,
+        replyContents: {},
+        myPostYear: null,
+        myPostMonth: null,
+        myPostDate: null,
+        isLastMyPost: null
+      });
+    } else if (clicked === "myPost-on" && this.state.activeItem === clicked) {
+      this.setState({
+        postData: null,
+        replyContents: {},
+        myPostYear: null,
+        myPostMonth: null,
+        myPostDate: null,
+        isLastMyPost: null
+      });
+    }
+
+    if (clicked !== "search-on") {
+      this.setState({
+        userPost: null,
+        userPostReplyContents: {},
+        userFollow: null,
+        userPostYear: null,
+        userPostMonth: null,
+        userPostDate: null,
+        isLastUserPost: null
+      });
+    } else if (clicked === "search-on" && this.state.activeItem === clicked) {
+      this.setState({
+        userPost: null,
+        userPostReplyContents: {},
+        userFollow: null,
+        userPostYear: null,
+        userPostMonth: null,
+        userPostDate: null,
+        isLastUserPost: null
       });
     }
 
@@ -292,6 +356,90 @@ class App extends Component {
       });
 
       return this.setState({ feedData: exFeedData });
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+  
+  getMoreMyPostData = (e) => {
+    const data = {
+      year: this.state.myPostYear,
+      month: this.state.myPostMonth,
+      date: this.state.myPostDate,
+      isLastMyPost: this.state.isLastMyPost
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    axios.post("/post/getMyPost", data, headers)
+    .then(res => {
+      let exMyPostData = this.state.postData;
+      const postArr = res.data.Post;
+      const likeArr = res.data.isLiked;
+
+      for (let i = postArr.length - 1; i >= 0; i--) {
+        postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+
+        if (postArr[i]['file'] !== null) {
+          postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+        }
+
+        exMyPostData.push(postArr[i]);
+      }
+
+      this.setState({
+        myPostYear: res.data.Year,
+        myPostMonth: res.data.Month,
+        myPostDate: res.data.Date,
+        isLastMyPost: res.data.isLastMyPost
+      });
+
+      return this.setState({ postData: exMyPostData });
+    })
+    .catch(err => {
+      alert(err);
+    });
+  }
+
+  getMoreUserPostData = (e) => {
+    const data = {
+      nickname: this.state.searchTarget,
+      year: this.state.userPostYear,
+      month: this.state.userPostMonth,
+      date: this.state.userPostDate,
+      isLastUserPost: this.state.isLastUserPost
+    }
+
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      }
+    };
+
+    axios.post("/post/getUserPost", data, headers)
+    .then(res => {
+      let exUserPostData = this.state.userPost;
+      const postArr = res.data.Post;
+      const likeArr = res.data.isLiked;
+
+      for (let i = postArr.length - 1; i >= 0; i--) {
+        postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+
+        if (postArr[i]['file'] !== null) {
+          postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+        }
+
+        exUserPostData.push(postArr[i]);
+      }
+
+      this.setState({ userPost: exUserPostData });
     })
     .catch(err => {
       alert(err);
@@ -615,7 +763,11 @@ class App extends Component {
     });
 
     const data = {
-      nickname: e.currentTarget.innerHTML
+      nickname: e.currentTarget.innerHTML,
+      year: this.state.userPostYear,
+      month: this.state.userPostMonth,
+      date: this.state.userPostDate,
+      isLastUserPost: this.state.isLastUserPost
     }
 
     const headers = {
@@ -884,11 +1036,11 @@ class App extends Component {
         <Login activeItem={this.state.activeItem} setLoginState={this.setLoginState} setActiveItem={this.setActiveItem} setNoticeCount={this.setNoticeCount} />
         <Join activeItem={this.state.activeItem} setActiveItem={this.setActiveItem} />
         <Post activeItem={this.state.activeItem} location={this.state.location} setLocationNull={this.setLocationNull}/>
-        <MyPost activeItem={this.state.activeItem} postData={this.state.postData} toggleLike={this.toggleLike} handleReplyChange={this.handleReplyChange} handleReply={this.handleReply} handleGetReply={this.handleGetReply} handleFoldReply={this.handleFoldReply} handleUserPost={this.handleUserPost} />
+        <MyPost activeItem={this.state.activeItem} postData={this.state.postData} toggleLike={this.toggleLike} handleReplyChange={this.handleReplyChange} handleReply={this.handleReply} handleGetReply={this.handleGetReply} handleFoldReply={this.handleFoldReply} handleUserPost={this.handleUserPost} getMoreMyPostData={this.getMoreMyPostData} isLastMyPost={this.state.isLastMyPost} />
         <Notice activeItem={this.state.activeItem} noticeData={this.state.noticeData} handleRemoveNotice={this.handleRemoveNotice} handleUserPost={this.handleUserPost} handleMyPost={this.handleMyPost} />
         <Search activeItem={this.state.activeItem} handleUserPost={this.handleUserPost} />
         <Profile activeItem={this.state.activeItem} />
-        <UserPost searchTarget={this.state.searchTarget} userFollow={this.state.userFollow} userPost={this.state.userPost} replyContents={this.userPostReplyContents} handleUserPost={this.handleUserPost} handleMyPost={this.handleMyPost} handleClose={this.handleClose} toggleFollow={this.toggleFollow} toggleLike={this.userPostToggleLike} handleReplyChange={this.userPostHandleReplyChange} handleReply={this.userPostHandleReply} handleGetReply={this.userPostHandleGetReply} handleFoldReply={this.userPostHandleFoldReply} />
+        <UserPost searchTarget={this.state.searchTarget} userFollow={this.state.userFollow} userPost={this.state.userPost} replyContents={this.userPostReplyContents} handleUserPost={this.handleUserPost} handleMyPost={this.handleMyPost} handleClose={this.handleClose} toggleFollow={this.toggleFollow} toggleLike={this.userPostToggleLike} handleReplyChange={this.userPostHandleReplyChange} handleReply={this.userPostHandleReply} handleGetReply={this.userPostHandleGetReply} handleFoldReply={this.userPostHandleFoldReply} isLastUserPost={this.state.isLastUserPost} getMoreUserPostData={this.getMoreUserPostData} />
       </Fragment>
     );
   }

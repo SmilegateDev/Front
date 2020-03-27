@@ -5,6 +5,37 @@ class Login extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    const postDiv = document.getElementById("user-post");
+    postDiv.addEventListener("wheel", this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    const postDiv = document.getElementById("user-post");
+    postDiv.removeEventListener("wheel", this.handleScroll);
+  }
+
+  handleScroll = () => {
+    const postDiv = document.getElementById("user-post");
+
+    const { innerHeight } = window;
+    const { scrollHeight } = postDiv;
+    const { scrollTop } = postDiv;
+
+    if ((scrollHeight - innerHeight - scrollTop < 300) && this.props.isLastUserPost !== 1) {
+      this.props.getMoreUserPostData();
+      postDiv.removeEventListener("wheel", this.handleScroll);
+      setTimeout(() => {
+        this.addScrollEvent();
+      }, 1000);
+    }
+  }
+
+  addScrollEvent = () => {
+    const postDiv = document.getElementById("user-post");
+    postDiv.addEventListener("wheel", this.handleScroll);
+  }
+
   render() {
     return (
       <div id="user-post" className={this.props.userPost ? "right-out" : ""}>
@@ -65,6 +96,10 @@ class Login extends Component {
               <hr className="post-hr my-4" />
             </div>
             }) : null}
+            { this.props.isLastUserPost === 1 ?
+              <div className="mb-5">마지막 글입니다.</div> :
+              null
+            }
           </div>
         </article>
       </div>
