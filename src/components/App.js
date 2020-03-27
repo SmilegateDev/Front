@@ -457,21 +457,12 @@ class App extends Component {
           exUserPostData.push(postArr[i]);
         }
 
-        if (res.data.isLastUserPost === 1) {
-          this.setState({
-            userPostYear: null,
-            userPostMonth: null,
-            userPostDate: null,
-            isLastUserPost: res.data.isLastUserPost
-          });
-        } else {
-          this.setState({
-            userPostYear: res.data.Year,
-            userPostMonth: res.data.Month,
-            userPostDate: res.data.Date,
-            isLastUserPost: res.data.isLastUserPost
-          });
-        }
+        this.setState({
+          userPostYear: res.data.Year,
+          userPostMonth: res.data.Month,
+          userPostDate: res.data.Date,
+          isLastUserPost: res.data.isLastUserPost
+        });
 
         return this.setState({ userPost: exUserPostData });
       }
@@ -799,10 +790,10 @@ class App extends Component {
 
     const data = {
       nickname: e.currentTarget.innerHTML,
-      year: this.state.userPostYear,
-      month: this.state.userPostMonth,
-      date: this.state.userPostDate,
-      isLastUserPost: this.state.isLastUserPost
+      year: null,
+      month: null,
+      date: null,
+      isLastUserPost: 0
     }
 
     const headers = {
