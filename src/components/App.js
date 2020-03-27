@@ -439,6 +439,13 @@ class App extends Component {
         exUserPostData.push(postArr[i]);
       }
 
+      this.setState({
+        userPostYear: res.data.Year,
+        userPostMonth: res.data.Month,
+        userPostDate: res.data.Date,
+        isLastUserPost: res.data.isLastUserPost
+      });
+
       this.setState({ userPost: exUserPostData });
     })
     .catch(err => {
