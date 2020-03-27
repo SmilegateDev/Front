@@ -590,6 +590,8 @@ class App extends Component {
     .then(res => {
       if (res.data.success !== true) {
         return alert(res.data.message);
+      } else {
+        this.setState({ noticeCount: this.state.noticeCount - 1 });
       }
     })
     .catch(err => {
