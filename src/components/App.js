@@ -457,12 +457,21 @@ class App extends Component {
           exUserPostData.push(postArr[i]);
         }
 
-        this.setState({
-          userPostYear: res.data.Year,
-          userPostMonth: res.data.Month,
-          userPostDate: res.data.Date,
-          isLastUserPost: res.data.isLastUserPost
-        });
+        if (res.data.isLastUserPost === 1) {
+          this.setState({
+            userPostYear: null,
+            userPostMonth: null,
+            userPostDate: null,
+            isLastUserPost: res.data.isLastUserPost
+          });
+        } else {
+          this.setState({
+            userPostYear: res.data.Year,
+            userPostMonth: res.data.Month,
+            userPostDate: res.data.Date,
+            isLastUserPost: res.data.isLastUserPost
+          });
+        }
 
         return this.setState({ userPost: exUserPostData });
       }
@@ -823,12 +832,21 @@ class App extends Component {
         this.setState({ userPost: newUserPost });
         this.setState({ userFollow: res.data.isFollowed });
 
-        this.setState({
-          userPostYear: res.data.Year,
-          userPostMonth: res.data.Month,
-          userPostDate: res.data.Date,
-          isLastUserPost: res.data.isLastUserPost
-        });
+        if (res.data.isLastUserPost === 1) {
+          this.setState({
+            userPostYear: null,
+            userPostMonth: null,
+            userPostDate: null,
+            isLastUserPost: res.data.isLastUserPost
+          });
+        } else {
+          this.setState({
+            userPostYear: res.data.Year,
+            userPostMonth: res.data.Month,
+            userPostDate: res.data.Date,
+            isLastUserPost: res.data.isLastUserPost
+          });
+        }
       }
     })
     .catch(err => {
