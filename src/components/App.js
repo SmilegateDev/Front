@@ -823,21 +823,12 @@ class App extends Component {
         this.setState({ userPost: newUserPost });
         this.setState({ userFollow: res.data.isFollowed });
 
-        if (res.data.isLastUserPost === 1) {
-          this.setState({
-            userPostYear: null,
-            userPostMonth: null,
-            userPostDate: null,
-            isLastUserPost: res.data.isLastUserPost
-          });
-        } else {
-          this.setState({
-            userPostYear: res.data.Year,
-            userPostMonth: res.data.Month,
-            userPostDate: res.data.Date,
-            isLastUserPost: res.data.isLastUserPost
-          });
-        }
+        this.setState({
+          userPostYear: res.data.Year,
+          userPostMonth: res.data.Month,
+          userPostDate: res.data.Date,
+          isLastUserPost: res.data.isLastUserPost
+        });
       }
     })
     .catch(err => {
