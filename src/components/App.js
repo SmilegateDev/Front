@@ -207,7 +207,9 @@ class App extends Component {
         let newPostArr = []
 
         if (postArr) {
-          for (let i = postArr.length - 1; i >= 0; i--) {
+          const postArrLength = postArr.length;
+
+          for (let i = 0; i < postArrLength; i++) {
             postArr[i]['isLiked'] = likeArr[postArr[i]._id];
 
             if (postArr[i]['file'] !== null) {
@@ -399,7 +401,9 @@ class App extends Component {
       const likeArr = res.data.isLiked;
 
       if (postArr) {
-        for (let i = postArr.length - 1; i >= 0; i--) {
+        const postArrLength = postArr.length;
+
+        for (let i = 0; i < postArrLength; i++) {
           postArr[i]['isLiked'] = likeArr[postArr[i]._id];
 
           if (postArr[i]['file'] !== null) {
@@ -447,7 +451,9 @@ class App extends Component {
       const likeArr = res.data.isLiked;
 
       if (postArr) {
-        for (let i = postArr.length - 1; i >= 0; i--) {
+        const postArrLength = postArr.length;
+
+        for (let i = 0; i < postArrLength; i++) {
           postArr[i]['isLiked'] = likeArr[postArr[i]._id];
 
           if (postArr[i]['file'] !== null) {
@@ -810,7 +816,9 @@ class App extends Component {
       let newUserPost = []
 
       if (postArr) {
-        for (let i = postArr.length - 1; i >= 0; i--) {
+        const postArrLength = postArr.length;
+
+        for (let i = 0; i < postArrLength; i++) {
           postArr[i]['isLiked'] = likeArr[postArr[i]._id];
 
           if (postArr[i]['file'] !== null) {
