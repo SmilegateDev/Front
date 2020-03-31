@@ -856,7 +856,11 @@ class App extends Component {
     });
 
     const data = {
-      nickname: jwt.decode(localStorage.getItem("token")).nickname
+      nickname: jwt.decode(localStorage.getItem("token")).nickname,
+      year: null,
+      month: null,
+      date: null,
+      isLastUserPost: 0
     }
 
     const headers = {
@@ -874,10 +878,20 @@ class App extends Component {
       if (postArr) {
         for (let i = 0; i < postArr.length; i++) {
           postArr[i]['isLiked'] = likeArr[postArr[i]._id];
+
+          if (postArr[i]['file'] !== null) {
+            postArr[i]['file'] = "http://117.17.196.142:3003/statics/" + postArr[i]['file']
+          }
         }
   
         this.setState({ userFollow: res.data.isFollowed });
         this.setState({ userPost: postArr });
+        this.setState({
+          userPostYear: res.data.Year,
+          userPostMonth: res.data.Month,
+          userPostDate: res.data.Date,
+          isLastUserPost: res.data.isLastUserPost
+        });
       }
     })
     .catch(err => {
