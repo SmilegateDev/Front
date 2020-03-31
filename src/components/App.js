@@ -771,7 +771,7 @@ class App extends Component {
       if (res.data.success !== true) {
         return alert(res.data.message);
       } else {
-        let noticeCount = localStorage.getItem("noticeCount");
+        let noticeCount = localStorage.getItem("noticeCount") - 1;
         localStorage.setItem("noticeCount", noticeCount);
         this.setState({ noticeCount: this.state.noticeCount - 1 });
       }
