@@ -790,6 +790,9 @@ class App extends Component {
   // 시작
 
   handleUserPost = (e) => {
+    const postDiv = document.getElementById("user-post");
+    postDiv.scrollTo(0, 0);
+    
     this.setState({ 
       searchTarget: e.currentTarget.innerHTML
     });
@@ -878,11 +881,6 @@ class App extends Component {
     .catch(err => {
       alert(err);
     });
-  }
-
-  scrollToRef = () => {
-    const userPostDiv = document.getElementById("user-post");
-    userPostDiv.scrollTo(0, this.targetRef.current.offsetTop);
   }
 
   handleClose = () => {
@@ -1079,7 +1077,7 @@ class App extends Component {
         <MyPost activeItem={this.state.activeItem} postData={this.state.postData} toggleLike={this.toggleLike} handleReplyChange={this.handleReplyChange} handleReply={this.handleReply} handleGetReply={this.handleGetReply} handleFoldReply={this.handleFoldReply} handleUserPost={this.handleUserPost} getMoreMyPostData={this.getMoreMyPostData} isLastMyPost={this.state.isLastMyPost} />
         <Notice activeItem={this.state.activeItem} noticeData={this.state.noticeData} handleRemoveNotice={this.handleRemoveNotice} handleUserPost={this.handleUserPost} handleMyPost={this.handleMyPost} />
         <Search activeItem={this.state.activeItem} handleUserPost={this.handleUserPost} />
-        <Profile activeItem={this.state.activeItem} />
+        <Profile activeItem={this.state.activeItem} handleUserPost={this.handleUserPost} />
         <UserPost searchTarget={this.state.searchTarget} userFollow={this.state.userFollow} userPost={this.state.userPost} replyContents={this.userPostReplyContents} handleUserPost={this.handleUserPost} handleMyPost={this.handleMyPost} handleClose={this.handleClose} toggleFollow={this.toggleFollow} toggleLike={this.userPostToggleLike} handleReplyChange={this.userPostHandleReplyChange} handleReply={this.userPostHandleReply} handleGetReply={this.userPostHandleGetReply} handleFoldReply={this.userPostHandleFoldReply} isLastUserPost={this.state.isLastUserPost} getMoreUserPostData={this.getMoreUserPostData} />
       </Fragment>
     );
